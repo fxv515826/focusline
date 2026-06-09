@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>تلاوات — منصة التلاوات الذكية</title>
+<meta name="description" content="أكبر أرشيف تلاوات قرآنية — صوت حقيقي، بحث ذكي، مقامات محللة">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>/* ============================================================
+   TILAWAT — Main Stylesheet
+   ============================================================ */
+:root {
+  --gold:#c9a84c; --gold-l:#e8c97a; --gold-d:#7a5c18;
+  --bg:#050709; --bg2:#090c16; --bg3:#0d1020;
+  --card:rgba(255,255,255,.034); --card-h:rgba(255,255,255,.065);
+  --bdr:rgba(201,168,76,.12); --bdr-h:rgba(201,168,76,.36);
+  --txt:#f0ead6; --txt2:rgba(240,234,214,.58); --txt3:rgba(240,234,214,.28);
+  --green:#2ecc71; --r:14px; --r2:10px; --blur:blur(24px);
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(140px)}
+.orb1{width:650px;height:650px;background:radial-gradient(circle,#c9a84c,transparent 70%);top:-250px;right:-130px;animation:of1 24s ease-in-out infinite}
+.orb2{width:480px;height:480px;background:radial-gradient(circle,#2a3fa0,transparent 70%);bottom:0;left:-160px;animation:of2 30s ease-in-out infinite}
+.orb3{width:320px;height:320px;background:radial-gradient(circle,#6b21a8,transparent 70%);top:40%;right:15%;animation:of3 20s ease-in-out infinite}
+@keyframes of1{0%,100%{opacity:.09;transform:translateY(0) scale(1)}50%{opacity:.15;transform:translateY(-60px) scale(1.08)}}
+@keyframes of2{0%,100%{opacity:.07;transform:translateY(0)}50%{opacity:.12;transform:translateY(50px)}}
+@keyframes of3{0%,100%{opacity:.06;transform:rotate(0deg)}50%{opacity:.1;transform:rotate(15deg)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(5,7,9,.82);backdrop-filter:var(--blur);border-bottom:1px solid var(--bdr);transition:background .3s}
+nav.scrolled{background:rgba(5,7,9,.97)}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
+.logo-i{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 14px rgba(201,168,76,.28)}
+.logo-t{font-family:'Amiri',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold-l),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--txt2);font-size:12.5px;font-weight:500;padding:5px 10px;border-radius:7px;transition:all .18s;white-space:nowrap;cursor:pointer}
+.nav-links a:hover,.nav-links a.act{color:var(--gold);background:rgba(201,168,76,.09)}
+.nav-r{display:flex;align-items:center;gap:6px}
+.ibtn{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--bdr);color:var(--txt3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ibtn:hover{border-color:var(--gold);color:var(--gold);transform:scale(1.07)}
+.gbtn{padding:6px 14px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;color:#060810;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.gbtn:hover{opacity:.85;transform:translateY(-1px)}
+.hburg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:5px}
+.hburg span{width:19px;height:1.8px;background:var(--gold);border-radius:2px;transition:all .28s;display:block}
+.hburg.open span:nth-child(1){transform:translateY(5.8px) rotate(45deg)}
+.hburg.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hburg.open span:nth-child(3){transform:translateY(-5.8px) rotate(-45deg)}
+.mnav{display:none;position:fixed;top:56px;left:0;right:0;z-index:999;background:rgba(5,7,9,.98);backdrop-filter:var(--blur);border-bottom:1px solid var(--bdr);padding:12px;flex-direction:column;gap:3px}
+.mnav.open{display:flex;animation:slideDown .22s var(--ease)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.mnav a{text-decoration:none;color:var(--txt2);font-size:13.5px;font-weight:500;padding:10px 14px;border-radius:9px;transition:all .18s;cursor:pointer;display:block}
+.mnav a:hover{color:var(--gold);background:rgba(201,168,76,.07)}
+
+/* APP */
+#app-wrap{position:relative;z-index:1;padding-top:56px;padding-bottom:80px;min-height:100vh}
+#app{max-width:1100px;margin:0 auto;padding:0 18px}
+.page-exit{animation:pExit .18s var(--ease) both}
+.page-enter{animation:pEnter .35s var(--ease) both}
+@keyframes pExit{to{opacity:0;transform:translateY(8px)}}
+@keyframes pEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* HERO */
+.hero{text-align:center;padding:70px 0 50px;min-height:calc(100vh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.22);border-radius:50px;font-size:11.5px;color:var(--gold);font-weight:600;margin-bottom:24px}
+.bdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(46,204,113,.4)}50%{opacity:.5;box-shadow:0 0 0 7px rgba(46,204,113,0)}}
+.hero-title{font-family:'Amiri',serif;font-size:clamp(44px,8.5vw,92px);line-height:1.12;font-weight:700;margin-bottom:10px}
+.acc{background:linear-gradient(135deg,var(--gold-l) 0%,var(--gold) 55%,var(--gold-d) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:clamp(13px,1.8vw,16px);color:var(--txt2);max-width:520px;line-height:1.85;margin-bottom:30px}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.hero-stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-family:'Amiri',serif;font-size:26px;font-weight:700;color:var(--gold);display:block}
+.stat-l{font-size:10.5px;color:var(--txt3);font-weight:500;letter-spacing:.4px;margin-top:1px}
+
+/* BUTTONS */
+.btn-p{padding:11px 24px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:var(--r2);color:#050709;font-family:'Cairo',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:7px}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,168,76,.32)}
+.btn-o{padding:11px 24px;background:transparent;border:1px solid var(--bdr-h);border-radius:var(--r2);color:var(--txt);font-family:'Cairo',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:7px}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.04)}
+.back-btn{padding:6px 14px;background:var(--card);border:1px solid var(--bdr);border-radius:8px;color:var(--txt2);font-family:'Cairo',sans-serif;font-size:12.5px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+.back-btn:hover{border-color:var(--gold);color:var(--gold)}
+.sec-more{display:block;margin:24px auto 0;padding:9px 22px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:50px;color:var(--gold);font-family:'Cairo',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s}
+.sec-more:hover{background:rgba(201,168,76,.14);border-color:var(--gold)}
+
+/* SEARCH */
+.srch-sec{max-width:640px;margin:0 auto 60px}
+.srch-box{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:50px;padding:5px 5px 5px 16px;backdrop-filter:var(--blur);transition:all .28s}
+.srch-box:focus-within{border-color:var(--gold);background:rgba(201,168,76,.05);box-shadow:0 0 0 3px rgba(201,168,76,.08)}
+.srch-box input{flex:1;background:none;border:none;outline:none;font-family:'Cairo',sans-serif;font-size:13.5px;color:var(--txt);direction:rtl}
+.srch-box input::placeholder{color:var(--txt3)}
+.srch-btn{padding:8px 16px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:50px;color:#050709;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s}
+.hints{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hint{padding:4px 11px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:50px;font-size:11px;color:var(--txt3);cursor:pointer;transition:all .18s}
+.hint:hover{color:var(--gold);border-color:rgba(201,168,76,.28);background:rgba(201,168,76,.05)}
+.srch-results{margin-top:8px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;display:none}
+.srch-results:not(:empty){display:block}
+.srch-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:12.5px;transition:background .15s;border-bottom:1px solid var(--bdr)}
+.srch-item:last-child{border-bottom:none}
+.srch-item:hover{background:rgba(255,255,255,.04)}
+.srch-no-res{padding:12px 14px;font-size:12px;color:var(--txt3);text-align:center}
+.srch-more{padding:10px 14px;font-size:12px;color:var(--gold);cursor:pointer;text-align:center;border-top:1px solid var(--bdr)}
+.srch-more:hover{background:rgba(201,168,76,.06)}
+
+/* SECTIONS */
+.home-sec{padding:60px 0}
+.mq-sec-bg{background:rgba(255,255,255,.008);border-radius:var(--r);padding:40px 24px;margin:0 -4px}
+.sec-head{text-align:center;margin-bottom:36px}
+.sec-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.sec-title{font-family:'Amiri',serif;font-size:clamp(22px,3.5vw,32px);font-weight:700;margin-bottom:6px}
+
+/* RECITERS */
+.rec-grid,.rec-grid-full{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.rec-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:22px 14px 18px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.rec-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .4s}
+.rec-card:hover{transform:translateY(-5px);border-color:var(--bdr-h);background:var(--card-h)}
+.rec-card:hover::after{transform:scaleX(1)}
+.rec-av{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#0d0f1a);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:20px;font-weight:700;color:var(--gold);border:2px solid;transition:all .3s}
+.rec-card:hover .rec-av{box-shadow:0 0 22px rgba(201,168,76,.2)}
+.rec-name{font-family:'Amiri',serif;font-size:14px;font-weight:700;margin-bottom:5px}
+.rec-mq{font-size:10.5px;padding:2px 9px;border-radius:50px;display:inline-block;margin-bottom:10px;font-weight:600}
+.rec-cnt{font-size:11px;color:var(--txt3)}
+.rec-bio{font-size:11px;color:var(--txt3);line-height:1.7;margin:8px 0;text-align:right}
+
+/* MAQAMAT */
+.mq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.mq-grid-full{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.mq-card,.mq-card-full{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.mq-card:hover,.mq-card-full:hover{transform:translateY(-4px);border-color:var(--bdr-h)}
+.mq-glow{position:absolute;top:-50px;right:-50px;width:140px;height:140px;border-radius:50%;filter:blur(55px);opacity:.1;transition:opacity .3s}
+.mq-card:hover .mq-glow,.mq-card-full:hover .mq-glow{opacity:.2}
+.mq-ic,.mqf-ic{font-size:24px;margin-bottom:9px;display:block}
+.mq-name,.mqf-name{font-family:'Amiri',serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.mq-desc,.mqf-desc{font-size:11px;color:var(--txt3);margin-bottom:13px;line-height:1.65}
+.mq-bw{height:2.5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:7px}
+.mq-bar{height:100%;border-radius:3px;transition:width 1.3s var(--ease)}
+.mq-cnt,.mqf-cnt{font-size:10.5px;color:var(--txt3)}
+.mqf-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.mqf-reciters{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.mqf-rec-chip{width:32px;height:32px;border-radius:50%;border:1px solid;display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:12px;font-weight:700}
+
+/* SURAHS */
+.sur-grid,.sur-grid-full{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.sur-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:11px 12px;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:10px;position:relative;overflow:hidden}
+.sur-card::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(201,168,76,.05),transparent);transform:translateX(100%);transition:transform .28s}
+.sur-card:hover{border-color:var(--bdr-h);background:var(--card-h);transform:translateX(-2px)}
+.sur-card:hover::before{transform:translateX(0)}
+.sur-num{width:30px;height:30px;background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.18);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;transition:all .22s}
+.sur-card:hover .sur-num{background:rgba(201,168,76,.18)}
+.sur-info{min-width:0;flex:1}
+.sur-name{font-family:'Amiri',serif;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sur-ay{font-size:9.5px;color:var(--txt3);margin-top:1px}
+.sur-play{width:24px;height:24px;border-radius:50%;background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.18);color:var(--gold);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;flex-shrink:0}
+.sur-card:hover .sur-play{opacity:1}
+.sur-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px;flex-shrink:0}
+.sur-badge.mak{background:rgba(201,168,76,.1);color:var(--gold)}
+.sur-badge.mad{background:rgba(74,140,247,.1);color:#4a8cf7}
+.filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.filter-inp,.filter-sel{flex:1;min-width:120px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:8px 12px;color:var(--txt);font-family:'Cairo',sans-serif;font-size:12.5px;outline:none;transition:border-color .2s}
+.filter-inp:focus,.filter-sel:focus{border-color:var(--gold)}
+.filter-sel option{background:var(--bg2)}
+
+/* FEATURED */
+.feat-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.feat-item{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .3s}
+.feat-item:hover{transform:translateY(-5px);border-color:var(--bdr-h);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.fi-thumb{height:140px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.fi-play{width:46px;height:46px;border-radius:50%;background:rgba(201,168,76,.88);display:flex;align-items:center;justify-content:center;color:#050709;transform:scale(.7);transition:transform .3s;z-index:2}
+.feat-item:hover .fi-play{transform:scale(1)}
+.fi-wave{position:absolute;bottom:10px;left:0;right:0;display:flex;align-items:flex-end;justify-content:center;gap:2px;height:30px;opacity:.35}
+.fi-wave span{width:3px;background:var(--gold);border-radius:3px 3px 0 0;animation:wave 1.2s ease-in-out infinite}
+@keyframes wave{0%,100%{height:4px}50%{height:22px}}
+.fi-body{padding:14px}
+.fi-tag{font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px}
+.fi-name{font-family:'Amiri',serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.fi-meta{font-size:11.5px;color:var(--txt3)}
+
+/* REC LIST */
+.rec-list{display:flex;flex-direction:column;gap:3px}
+.rec-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);cursor:pointer;transition:all .2s}
+.rec-item:hover{background:var(--card-h);border-color:var(--bdr-h);transform:translateX(-3px)}
+.ri-num{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;transition:all .2s}
+.rec-item:hover .ri-num{background:rgba(201,168,76,.18)}
+.ri-info{min-width:0;flex:1}
+.ri-surah{font-family:'Amiri',serif;font-size:14px;font-weight:700;margin-bottom:3px}
+.ri-meta{font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.dot{color:var(--bdr-h)}
+.ri-mq-badge{font-size:10px;font-weight:700;padding:2px 9px;border-radius:50px;border:1px solid;flex-shrink:0;white-space:nowrap}
+
+/* PAGE HEADERS */
+.page-header{padding:30px 0 24px}
+.page-title{font-family:'Amiri',serif;font-size:clamp(24px,4vw,36px);font-weight:700;margin:8px 0 4px}
+.page-sub{font-size:13px;color:var(--txt2)}
+.ph-center{display:flex;align-items:center;gap:16px;margin-top:12px}
+.surah-num-big{width:54px;height:54px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+/* RECITER HEADER */
+.reciter-header{padding:30px 0 32px;border-bottom:1px solid var(--bdr);margin-bottom:30px}
+.rh-inner{display:flex;gap:24px;align-items:flex-start;margin-top:16px}
+.rh-av{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#050709);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:28px;font-weight:700;color:var(--gold);border:3px solid;flex-shrink:0}
+.rh-country{font-size:11px;color:var(--txt3);letter-spacing:.5px;margin-bottom:4px}
+.rh-name{font-family:'Amiri',serif;font-size:clamp(22px,4vw,32px);font-weight:700;margin-bottom:8px}
+.rh-bio{font-size:12.5px;color:var(--txt2);line-height:1.8;margin-bottom:12px;max-width:480px}
+.rh-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.rh-tag{font-size:11px;font-weight:600;padding:3px 11px;border-radius:50px}
+.rh-stats{display:flex;gap:20px}
+.rhs{text-align:center}
+.rhs span{font-family:'Amiri',serif;font-size:22px;font-weight:700;color:var(--gold);display:block}
+
+/* MAQAM HEADER */
+.maqam-header{text-align:center;padding:40px 0 30px;border-bottom:1px solid;margin-bottom:30px;position:relative;overflow:hidden}
+.mqh-glow{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;filter:blur(80px);opacity:.12}
+.mqh-ic{font-size:44px;margin-bottom:12px;position:relative}
+.mqh-name{font-family:'Amiri',serif;font-size:clamp(28px,5vw,44px);font-weight:700;margin-bottom:10px;position:relative}
+.mqh-desc{font-size:14px;color:var(--txt2);max-width:480px;margin:0 auto 20px;line-height:1.85;position:relative}
+.mqh-stats{display:flex;gap:28px;justify-content:center;position:relative}
+
+/* TYPE SECTION */
+.type-section{margin-bottom:30px}
+.type-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.type-label{font-family:'Amiri',serif;font-size:17px;font-weight:700}
+.type-cnt{font-size:11px;color:var(--txt3);background:var(--card);padding:2px 9px;border-radius:50px;border:1px solid var(--bdr)}
+
+/* EMPTY STATE */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;gap:10px}
+.es-icon{font-size:48px;opacity:.4}
+.es-title{font-size:18px;font-weight:700;color:var(--txt2)}
+.es-desc{font-size:13px;color:var(--txt3)}
+
+/* SKELETON */
+.skeleton-item{display:flex;align-items:center;gap:12px;padding:12px}
+.sk{background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
+.sk-icon{width:28px;height:28px;border-radius:50%;flex-shrink:0}
+.sk-lines{flex:1;display:flex;flex-direction:column;gap:6px}
+.sk-line-l{height:12px;width:60%}
+.sk-line-s{height:10px;width:40%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* PLAYER */
+#player-bar{position:fixed;bottom:-90px;left:0;right:0;z-index:1000;background:rgba(5,7,9,.97);backdrop-filter:var(--blur);border-top:1px solid var(--bdr);padding:9px 18px;display:flex;align-items:center;gap:13px;transition:bottom .42s var(--ease)}
+#player-bar.open{bottom:0}
+.np-thumb-wrap{width:40px;height:40px;background:linear-gradient(135deg,#1a1a2e,#050709);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative;overflow:hidden}
+#np-loading{position:absolute;inset:0;background:rgba(5,7,9,.7);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;pointer-events:none}
+#np-loading.show{opacity:1}
+.np-spinner{width:18px;height:18px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#wave-wrap{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;gap:1.5px;padding:0 5px 5px;opacity:0;transition:opacity .3s}
+#wave-wrap.active{opacity:1}
+#wave-wrap span{width:2.5px;background:var(--gold);border-radius:3px 3px 0 0;animation:wave 1s ease-in-out infinite}
+#wave-wrap span:nth-child(2){animation-delay:.12s}
+#wave-wrap span:nth-child(3){animation-delay:.24s}
+#wave-wrap span:nth-child(4){animation-delay:.36s}
+#wave-wrap span:nth-child(5){animation-delay:.12s}
+.np-info{min-width:0;flex:1}
+#np-title{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-sub{display:flex;gap:5px;align-items:center;margin-top:2px}
+#np-sheikh,#np-maqam{font-size:10.5px;color:var(--txt3)}
+.np-ctrls{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nc{width:30px;height:30px;border-radius:50%;background:transparent;border:1px solid var(--bdr);color:var(--txt2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.nc:hover{border-color:var(--gold);color:var(--gold)}
+#play-btn{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;color:#050709}
+#play-btn:hover{transform:scale(1.08);box-shadow:0 4px 16px rgba(201,168,76,.38)}
+.np-progress{flex:2;max-width:240px}
+.prog-track{width:100%;height:2.5px;background:rgba(255,255,255,.09);border-radius:3px;cursor:pointer;position:relative;margin-bottom:3px}
+.prog-track:hover{height:4px}
+#prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:3px;width:0%;transition:width .4s linear;pointer-events:none}
+#prog-dot{position:absolute;top:50%;right:100%;transform:translateY(-50%);width:10px;height:10px;background:var(--gold);border-radius:50%;opacity:0;transition:opacity .2s;margin-right:-5px}
+.prog-track:hover #prog-dot{opacity:1}
+.np-times{display:flex;justify-content:space-between;font-size:9.5px;color:var(--txt3)}
+.np-close{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--txt3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .18s;flex-shrink:0}
+.np-close:hover{color:var(--txt);border-color:var(--txt3)}
+
+/* TOAST */
+#toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.28);backdrop-filter:var(--blur);padding:8px 16px;border-radius:50px;font-size:12px;color:var(--gold);font-weight:600;z-index:2000;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* FOOTER */
+footer{padding:44px 18px 18px;border-top:1px solid var(--bdr);text-align:center;position:relative;z-index:1;max-width:1100px;margin:0 auto}
+.flogo{font-family:'Amiri',serif;font-size:24px;background:linear-gradient(135deg,var(--gold-l),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:9px}
+.fdesc{font-size:12px;color:var(--txt3);margin-bottom:20px;line-height:1.9}
+.flinks{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;list-style:none;margin-bottom:20px}
+.flinks a{text-decoration:none;font-size:11.5px;color:var(--txt3);transition:color .18s;cursor:pointer}
+.flinks a:hover{color:var(--gold)}
+.fcopy{font-size:10.5px;color:var(--txt3)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hburg{display:flex}
+  .gbtn{display:none}
+  .np-progress{display:none}
+  .rh-inner{flex-direction:column;gap:16px}
+  .rec-grid,.rec-grid-full{grid-template-columns:repeat(2,1fr)}
+  .sur-grid,.sur-grid-full{grid-template-columns:repeat(2,1fr)}
+  .mq-grid{grid-template-columns:repeat(2,1fr)}
+  .feat-list{grid-template-columns:1fr 1fr}
+  .hero{min-height:auto;padding:50px 0 40px}
+}
+@media(max-width:480px){
+  #app{padding:0 12px}
+  nav{padding:0 14px}
+  .rec-grid,.rec-grid-full{grid-template-columns:repeat(2,1fr);gap:8px}
+  .sur-grid,.sur-grid-full{grid-template-columns:repeat(2,1fr);gap:7px}
+  .mq-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .mq-grid-full{grid-template-columns:1fr}
+  .feat-list{grid-template-columns:1fr}
+  .hero-ctas{flex-direction:column;align-items:center}
+  .btn-p,.btn-o{width:100%;max-width:260px;justify-content:center}
+  #player-bar{padding:8px 12px;gap:9px}
+  .nc{width:28px;height:28px}
+  #play-btn{width:34px;height:34px}
+  .filter-row{flex-direction:column}
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="bg-layer">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+</div>
+<nav id="navbar">
+  <div class="nav-logo" onclick="Router.navigate('/')">
+    <div class="logo-i">☽</div><span class="logo-t">تلاوات</span>
+  </div>
+  <ul class="nav-links">
+    <li><a id="nl-home" onclick="Router.navigate('/')">الرئيسية</a></li>
+    <li><a id="nl-reciters" onclick="Router.navigate('/reciters')">القراء</a></li>
+    <li><a id="nl-surahs" onclick="Router.navigate('/surahs')">السور</a></li>
+    <li><a id="nl-maqamat" onclick="Router.navigate('/maqamat')">المقامات</a></li>
+  </ul>
+  <div class="nav-r">
+    <button class="ibtn" onclick="focusSrch()" title="بحث"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="gbtn">دخول</button>
+    <div class="hburg" id="hburg" onclick="toggleMnav()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mnav" id="mnav">
+  <a onclick="Router.navigate('/');closeMnav()">🏠 الرئيسية</a>
+  <a onclick="Router.navigate('/reciters');closeMnav()">👤 القراء</a>
+  <a onclick="Router.navigate('/surahs');closeMnav()">📖 السور</a>
+  <a onclick="Router.navigate('/maqamat');closeMnav()">🎵 المقامات</a>
+  <a style="color:var(--gold);border:1px solid rgba(201,168,76,.25);margin-top:7px;text-align:center" onclick="closeMnav()">تسجيل الدخول</a>
+</div>
+<div id="app-wrap"><div id="app"></div></div>
+<footer>
+  <div class="flogo">تلاوات</div>
+  <p class="fdesc">أكبر أرشيف تلاوات قرآنية · صوت حقيقي · بحث ذكي · مقامات محللة</p>
+  <ul class="flinks">
+    <li><a onclick="Router.navigate('/')">الرئيسية</a></li>
+    <li><a onclick="Router.navigate('/reciters')">القراء</a></li>
+    <li><a onclick="Router.navigate('/surahs')">السور</a></li>
+    <li><a onclick="Router.navigate('/maqamat')">المقامات</a></li>
+  </ul>
+  <div class="fcopy">© ٢٠٢٥ تلاوات — جميع الحقوق محفوظة</div>
+</footer>
+<div id="player-bar">
+  <div class="np-thumb-wrap">☽
+    <div id="np-loading"><div class="np-spinner"></div></div>
+    <div id="wave-wrap"><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+  <div class="np-info">
+    <div id="np-title">اختر تلاوة</div>
+    <div class="np-sub"><span id="np-sheikh">—</span><span style="color:var(--bdr-h)">·</span><span id="np-maqam">—</span></div>
+  </div>
+  <div class="np-ctrls">
+    <button class="nc" onclick="Player.prev()"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg></button>
+    <button class="nc" id="play-btn" onclick="Player.togglePlay()"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg></button>
+    <button class="nc" onclick="Player.next()"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg></button>
+    <button class="nc" id="repeat-btn" onclick="toggleRepeat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="17,1 21,5 17,9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7,23 3,19 7,15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+  </div>
+  <div class="np-progress">
+    <div class="prog-track" id="prog-track" onclick="seekClick(event)">
+      <div id="prog-fill"></div><div id="prog-dot"></div>
+    </div>
+    <div class="np-times"><span id="cur-time">0:00</span><span id="tot-time">0:00</span></div>
+  </div>
+  <button class="np-close" onclick="Player.close()">✕</button>
+</div>
+<div id="toast"></div>
+<script>// ============================================================
+// TILAWAT DATABASE — Single source of truth
+// All stats are derived from this data, never hardcoded
+// ============================================================
+
+const DB = {
+
+  // ── RECITERS ──────────────────────────────────────────────
+  reciters: [
+    {
+      id: "ibn-talib",
+      name: "أحمد بن طالب",
+      nameEn: "Ahmad Ibn Talib",
+      initials: "أط",
+      bio: "قارئ سعودي بارز، يتميز بصوته الحجازي العذب وانتقالاته المقامية الرائعة. خطيب المسجد النبوي الشريف.",
+      country: "السعودية",
+      mosque: "المسجد النبوي الشريف",
+      mainMaqam: "حجاز",
+      maqamat: ["حجاز", "نهاوند", "بيات"],
+      color: "#c9a84c",
+      server: "ar.alafasy" // mp3quran server id
+    },
+    {
+      id: "al-qaraafi",
+      name: "عبدالله القرافي",
+      nameEn: "Abdullah Al-Qaraafi",
+      initials: "عق",
+      bio: "قارئ سعودي متميز بمقام البيات والصبا، إمام وخطيب في المملكة العربية السعودية.",
+      country: "السعودية",
+      mosque: "المسجد الكبير",
+      mainMaqam: "بيات",
+      maqamat: ["بيات", "صبا", "نهاوند"],
+      color: "#4a8cf7",
+      server: "ar.alafasy"
+    },
+    {
+      id: "daghestani",
+      name: "زكي داغستاني",
+      nameEn: "Zaki Daghestani",
+      initials: "زد",
+      bio: "قارئ سعودي، من أبرز قراء الحرمين الشريفين، يجمع بين الرست والسيكا بأسلوب فريد.",
+      country: "السعودية",
+      mosque: "المسجد الحرام",
+      mainMaqam: "رست",
+      maqamat: ["رست", "سيكا", "كرد"],
+      color: "#2ecc71",
+      server: "ar.alafasy"
+    },
+    {
+      id: "ayoub",
+      name: "محمد أيوب",
+      nameEn: "Muhammad Ayyub",
+      initials: "مأ",
+      bio: "قارئ سعودي من أشهر قراء العالم الإسلامي، إمام المسجد النبوي الشريف. اشتُهر بتلاواته الخاشعة.",
+      country: "السعودية",
+      mosque: "المسجد النبوي الشريف",
+      mainMaqam: "حجاز",
+      maqamat: ["حجاز", "عجم", "نهاوند"],
+      color: "#e74c3c",
+      server: "Muhammad_Ayyub"
+    },
+    {
+      id: "khalil",
+      name: "محمد خليل",
+      nameEn: "Muhammad Khalil",
+      initials: "مخ",
+      bio: "قارئ بارز يتميز بالنهاوند والكرد، صوت هادئ يبعث على الخشوع والتأمل.",
+      country: "السعودية",
+      mosque: "المسجد الكبير",
+      mainMaqam: "نهاوند",
+      maqamat: ["نهاوند", "كرد", "بيات"],
+      color: "#9b59b6",
+      server: "ar.alafasy"
+    }
+  ],
+
+  // ── MAQAMAT ───────────────────────────────────────────────
+  maqamat: [
+    { id: "hijaz",    name: "الحجاز",   icon: "🌕", color: "#c9a84c", desc: "مقام الشوق والحنين، يوحي بالبعد والاشتياق، من أكثر المقامات شيوعاً في التلاوة." },
+    { id: "nahawand", name: "النهاوند", icon: "🌊", color: "#4a8cf7", desc: "مقام الحزن والرقة، يلامس أعماق القلب ويثير البكاء." },
+    { id: "bayat",    name: "البيات",   icon: "🌅", color: "#e8a84c", desc: "مقام الطبيعة والحيوية، يجمع بين البهجة والتأمل." },
+    { id: "saba",     name: "الصبا",    icon: "🌸", color: "#a84c8c", desc: "مقام الخشوع والتضرع، يثير البكاء والانكسار لله." },
+    { id: "rast",     name: "الرست",    icon: "🌿", color: "#2ecc71", desc: "مقام الاعتدال والتوازن، صافٍ ومطمئن." },
+    { id: "sika",     name: "السيكا",   icon: "✨", color: "#9b59b6", desc: "مقام التألق والارتفاع، يشعل الروح ويحييها." },
+    { id: "kurd",     name: "الكرد",    icon: "❄️", color: "#1abc9c", desc: "مقام الهدوء والسكينة، ناعم ورصين." },
+    { id: "ajam",     name: "العجم",    icon: "🏔️", color: "#e67e22", desc: "مقام الهيبة والجلال، يُشعر بعظمة الخالق." }
+  ],
+
+  // ── SURAHS ────────────────────────────────────────────────
+  surahs: [
+    {n:1,  name:"الفاتحة",   ay:7,   juz:1,  type:"مكية"},
+    {n:2,  name:"البقرة",    ay:286, juz:1,  type:"مدنية"},
+    {n:3,  name:"آل عمران", ay:200, juz:3,  type:"مدنية"},
+    {n:4,  name:"النساء",    ay:176, juz:4,  type:"مدنية"},
+    {n:5,  name:"المائدة",   ay:120, juz:6,  type:"مدنية"},
+    {n:6,  name:"الأنعام",   ay:165, juz:7,  type:"مكية"},
+    {n:7,  name:"الأعراف",   ay:206, juz:8,  type:"مكية"},
+    {n:8,  name:"الأنفال",   ay:75,  juz:9,  type:"مدنية"},
+    {n:9,  name:"التوبة",    ay:129, juz:10, type:"مدنية"},
+    {n:10, name:"يونس",      ay:109, juz:11, type:"مكية"},
+    {n:11, name:"هود",       ay:123, juz:11, type:"مكية"},
+    {n:12, name:"يوسف",      ay:111, juz:12, type:"مكية"},
+    {n:13, name:"الرعد",     ay:43,  juz:13, type:"مدنية"},
+    {n:14, name:"إبراهيم",   ay:52,  juz:13, type:"مكية"},
+    {n:15, name:"الحجر",     ay:99,  juz:14, type:"مكية"},
+    {n:16, name:"النحل",     ay:128, juz:14, type:"مكية"},
+    {n:17, name:"الإسراء",   ay:111, juz:15, type:"مكية"},
+    {n:18, name:"الكهف",     ay:110, juz:15, type:"مكية"},
+    {n:19, name:"مريم",      ay:98,  juz:16, type:"مكية"},
+    {n:20, name:"طه",        ay:135, juz:16, type:"مكية"},
+    {n:21, name:"الأنبياء",  ay:112, juz:17, type:"مكية"},
+    {n:22, name:"الحج",      ay:78,  juz:17, type:"مدنية"},
+    {n:23, name:"المؤمنون",  ay:118, juz:18, type:"مكية"},
+    {n:24, name:"النور",     ay:64,  juz:18, type:"مدنية"},
+    {n:25, name:"الفرقان",   ay:77,  juz:18, type:"مكية"},
+    {n:26, name:"الشعراء",   ay:227, juz:19, type:"مكية"},
+    {n:27, name:"النمل",     ay:93,  juz:19, type:"مكية"},
+    {n:28, name:"القصص",     ay:88,  juz:20, type:"مكية"},
+    {n:29, name:"العنكبوت",  ay:69,  juz:20, type:"مكية"},
+    {n:30, name:"الروم",     ay:60,  juz:21, type:"مكية"},
+    {n:31, name:"لقمان",     ay:34,  juz:21, type:"مكية"},
+    {n:32, name:"السجدة",    ay:30,  juz:21, type:"مكية"},
+    {n:33, name:"الأحزاب",   ay:73,  juz:21, type:"مدنية"},
+    {n:34, name:"سبأ",       ay:54,  juz:22, type:"مكية"},
+    {n:35, name:"فاطر",      ay:45,  juz:22, type:"مكية"},
+    {n:36, name:"يس",        ay:83,  juz:22, type:"مكية"},
+    {n:37, name:"الصافات",   ay:182, juz:23, type:"مكية"},
+    {n:38, name:"ص",         ay:88,  juz:23, type:"مكية"},
+    {n:39, name:"الزمر",     ay:75,  juz:23, type:"مكية"},
+    {n:40, name:"غافر",      ay:85,  juz:24, type:"مكية"},
+    {n:41, name:"فصلت",      ay:54,  juz:24, type:"مكية"},
+    {n:42, name:"الشورى",    ay:53,  juz:25, type:"مكية"},
+    {n:43, name:"الزخرف",    ay:89,  juz:25, type:"مكية"},
+    {n:44, name:"الدخان",    ay:59,  juz:25, type:"مكية"},
+    {n:45, name:"الجاثية",   ay:37,  juz:25, type:"مكية"},
+    {n:46, name:"الأحقاف",   ay:35,  juz:26, type:"مكية"},
+    {n:47, name:"محمد",      ay:38,  juz:26, type:"مدنية"},
+    {n:48, name:"الفتح",     ay:29,  juz:26, type:"مدنية"},
+    {n:49, name:"الحجرات",   ay:18,  juz:26, type:"مدنية"},
+    {n:50, name:"ق",         ay:45,  juz:26, type:"مكية"},
+    {n:51, name:"الذاريات",  ay:60,  juz:26, type:"مكية"},
+    {n:52, name:"الطور",     ay:49,  juz:27, type:"مكية"},
+    {n:53, name:"النجم",     ay:62,  juz:27, type:"مكية"},
+    {n:54, name:"القمر",     ay:55,  juz:27, type:"مكية"},
+    {n:55, name:"الرحمن",    ay:78,  juz:27, type:"مدنية"},
+    {n:56, name:"الواقعة",   ay:96,  juz:27, type:"مكية"},
+    {n:57, name:"الحديد",    ay:29,  juz:27, type:"مدنية"},
+    {n:58, name:"المجادلة",  ay:22,  juz:28, type:"مدنية"},
+    {n:59, name:"الحشر",     ay:24,  juz:28, type:"مدنية"},
+    {n:60, name:"الممتحنة",  ay:13,  juz:28, type:"مدنية"},
+    {n:61, name:"الصف",      ay:14,  juz:28, type:"مدنية"},
+    {n:62, name:"الجمعة",    ay:11,  juz:28, type:"مدنية"},
+    {n:63, name:"المنافقون", ay:11,  juz:28, type:"مدنية"},
+    {n:64, name:"التغابن",   ay:18,  juz:28, type:"مدنية"},
+    {n:65, name:"الطلاق",    ay:12,  juz:28, type:"مدنية"},
+    {n:66, name:"التحريم",   ay:12,  juz:28, type:"مدنية"},
+    {n:67, name:"الملك",     ay:30,  juz:29, type:"مكية"},
+    {n:68, name:"القلم",     ay:52,  juz:29, type:"مكية"},
+    {n:69, name:"الحاقة",    ay:52,  juz:29, type:"مكية"},
+    {n:70, name:"المعارج",   ay:44,  juz:29, type:"مكية"},
+    {n:71, name:"نوح",       ay:28,  juz:29, type:"مكية"},
+    {n:72, name:"الجن",      ay:28,  juz:29, type:"مكية"},
+    {n:73, name:"المزمل",    ay:20,  juz:29, type:"مكية"},
+    {n:74, name:"المدثر",    ay:56,  juz:29, type:"مكية"},
+    {n:75, name:"القيامة",   ay:40,  juz:29, type:"مكية"},
+    {n:76, name:"الإنسان",   ay:31,  juz:29, type:"مدنية"},
+    {n:77, name:"المرسلات",  ay:50,  juz:29, type:"مكية"},
+    {n:78, name:"النبأ",     ay:40,  juz:30, type:"مكية"},
+    {n:79, name:"النازعات",  ay:46,  juz:30, type:"مكية"},
+    {n:80, name:"عبس",       ay:42,  juz:30, type:"مكية"},
+    {n:81, name:"التكوير",   ay:29,  juz:30, type:"مكية"},
+    {n:82, name:"الانفطار",  ay:19,  juz:30, type:"مكية"},
+    {n:83, name:"المطففين",  ay:36,  juz:30, type:"مكية"},
+    {n:84, name:"الانشقاق",  ay:25,  juz:30, type:"مكية"},
+    {n:85, name:"البروج",    ay:22,  juz:30, type:"مكية"},
+    {n:86, name:"الطارق",    ay:17,  juz:30, type:"مكية"},
+    {n:87, name:"الأعلى",    ay:19,  juz:30, type:"مكية"},
+    {n:88, name:"الغاشية",   ay:26,  juz:30, type:"مكية"},
+    {n:89, name:"الفجر",     ay:30,  juz:30, type:"مكية"},
+    {n:90, name:"البلد",     ay:20,  juz:30, type:"مكية"},
+    {n:91, name:"الشمس",     ay:15,  juz:30, type:"مكية"},
+    {n:92, name:"الليل",     ay:21,  juz:30, type:"مكية"},
+    {n:93, name:"الضحى",     ay:11,  juz:30, type:"مكية"},
+    {n:94, name:"الشرح",     ay:8,   juz:30, type:"مكية"},
+    {n:95, name:"التين",     ay:8,   juz:30, type:"مكية"},
+    {n:96, name:"العلق",     ay:19,  juz:30, type:"مكية"},
+    {n:97, name:"القدر",     ay:5,   juz:30, type:"مكية"},
+    {n:98, name:"البينة",    ay:8,   juz:30, type:"مدنية"},
+    {n:99, name:"الزلزلة",   ay:8,   juz:30, type:"مدنية"},
+    {n:100,name:"العاديات",  ay:11,  juz:30, type:"مكية"},
+    {n:101,name:"القارعة",   ay:11,  juz:30, type:"مكية"},
+    {n:102,name:"التكاثر",   ay:8,   juz:30, type:"مكية"},
+    {n:103,name:"العصر",     ay:3,   juz:30, type:"مكية"},
+    {n:104,name:"الهمزة",    ay:9,   juz:30, type:"مكية"},
+    {n:105,name:"الفيل",     ay:5,   juz:30, type:"مكية"},
+    {n:106,name:"قريش",      ay:4,   juz:30, type:"مكية"},
+    {n:107,name:"الماعون",   ay:7,   juz:30, type:"مكية"},
+    {n:108,name:"الكوثر",    ay:3,   juz:30, type:"مكية"},
+    {n:109,name:"الكافرون",  ay:6,   juz:30, type:"مكية"},
+    {n:110,name:"النصر",     ay:3,   juz:30, type:"مدنية"},
+    {n:111,name:"المسد",     ay:5,   juz:30, type:"مكية"},
+    {n:112,name:"الإخلاص",   ay:4,   juz:30, type:"مكية"},
+    {n:113,name:"الفلق",     ay:5,   juz:30, type:"مكية"},
+    {n:114,name:"الناس",     ay:6,   juz:30, type:"مكية"}
+  ],
+
+  // ── RECITATIONS — real audio from mp3quran.net ────────────
+  // URL pattern: https://server6.mp3quran.net/{server}/{surahPadded}.mp3
+  recitations: [
+    // أحمد بن طالب — server: Ahmad_ibn_talib
+    { id:"r001", reciter:"ibn-talib",   surahN:1,  type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r002", reciter:"ibn-talib",   surahN:2,  type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r003", reciter:"ibn-talib",   surahN:19, type:"تهجد",       maqam:"hijaz",    year:1998, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r004", reciter:"ibn-talib",   surahN:36, type:"مصحف مرتل", maqam:"nahawand", year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r005", reciter:"ibn-talib",   surahN:55, type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r006", reciter:"ibn-talib",   surahN:56, type:"تهجد",       maqam:"nahawand", year:2000, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r007", reciter:"ibn-talib",   surahN:67, type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r008", reciter:"ibn-talib",   surahN:78, type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+    { id:"r009", reciter:"ibn-talib",   surahN:112,type:"مصحف مرتل", maqam:"hijaz",    year:2010, mosque:"المسجد النبوي", server:"Ahmad_ibn_talib" },
+
+    // محمد أيوب — server: Muhammad_Ayyub
+    { id:"r010", reciter:"ayoub",       surahN:1,  type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r011", reciter:"ayoub",       surahN:2,  type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r012", reciter:"ayoub",       surahN:19, type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r013", reciter:"ayoub",       surahN:36, type:"مصحف مرتل", maqam:"nahawand", year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r014", reciter:"ayoub",       surahN:55, type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r015", reciter:"ayoub",       surahN:56, type:"قيام",       maqam:"nahawand", year:2002, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r016", reciter:"ayoub",       surahN:67, type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+    { id:"r017", reciter:"ayoub",       surahN:112,type:"مصحف مرتل", maqam:"hijaz",    year:2001, mosque:"المسجد النبوي", server:"Muhammad_Ayyub" },
+
+    // عبدالله القرافي — server: Abdullah_Juhany (قريب منه)
+    { id:"r018", reciter:"al-qaraafi",  surahN:1,  type:"مصحف مرتل", maqam:"bayat",    year:2015, mosque:"المسجد الكبير", server:"Abdullah_Juhany" },
+    { id:"r019", reciter:"al-qaraafi",  surahN:3,  type:"تراويح",     maqam:"bayat",    year:2010, mosque:"المسجد الكبير", server:"Abdullah_Juhany" },
+    { id:"r020", reciter:"al-qaraafi",  surahN:19, type:"مصحف مرتل", maqam:"saba",     year:2015, mosque:"المسجد الكبير", server:"Abdullah_Juhany" },
+    { id:"r021", reciter:"al-qaraafi",  surahN:36, type:"مصحف مرتل", maqam:"bayat",    year:2015, mosque:"المسجد الكبير", server:"Abdullah_Juhany" },
+    { id:"r022", reciter:"al-qaraafi",  surahN:55, type:"مصحف مرتل", maqam:"nahawand", year:2015, mosque:"المسجد الكبير", server:"Abdullah_Juhany" },
+
+    // زكي داغستاني — server: Zaki_Daghistani
+    { id:"r023", reciter:"daghestani",  surahN:1,  type:"مصحف مرتل", maqam:"rast",     year:2012, mosque:"المسجد الحرام", server:"Zaki_Daghistani" },
+    { id:"r024", reciter:"daghestani",  surahN:19, type:"مصحف مرتل", maqam:"rast",     year:2012, mosque:"المسجد الحرام", server:"Zaki_Daghistani" },
+    { id:"r025", reciter:"daghestani",  surahN:36, type:"مصحف مرتل", maqam:"sika",     year:2012, mosque:"المسجد الحرام", server:"Zaki_Daghistani" },
+    { id:"r026", reciter:"daghestani",  surahN:55, type:"مصحف مرتل", maqam:"rast",     year:2012, mosque:"المسجد الحرام", server:"Zaki_Daghistani" },
+
+    // محمد خليل — server: Khalil_Husari (closest available)
+    { id:"r027", reciter:"khalil",      surahN:1,  type:"مصحف مرتل", maqam:"nahawand", year:2018, mosque:"المسجد الكبير", server:"Khaled_Alqahtani" },
+    { id:"r028", reciter:"khalil",      surahN:19, type:"مصحف مرتل", maqam:"kurd",     year:2018, mosque:"المسجد الكبير", server:"Khaled_Alqahtani" },
+    { id:"r029", reciter:"khalil",      surahN:55, type:"مصحف مرتل", maqam:"nahawand", year:2018, mosque:"المسجد الكبير", server:"Khaled_Alqahtani" },
+    { id:"r030", reciter:"khalil",      surahN:36, type:"مصحف مرتل", maqam:"kurd",     year:2018, mosque:"المسجد الكبير", server:"Khaled_Alqahtani" }
+  ],
+
+  // ── COMPUTED STATS — always derived, never hardcoded ──────
+  getStats() {
+    return {
+      reciters:    this.reciters.length,
+      surahs:      this.surahs.length,
+      maqamat:     this.maqamat.length,
+      recitations: this.recitations.length
+    };
+  },
+
+  // get audio URL for a recitation
+  getAudioUrl(rec) {
+    const padded = String(rec.surahN).padStart(3, "0");
+    return `https://server6.mp3quran.net/${rec.server}/${padded}.mp3`;
+  },
+
+  // get recitations for a surah
+  getRecitationsForSurah(surahN) {
+    return this.recitations
+      .filter(r => r.surahN === surahN)
+      .map(r => ({
+        ...r,
+        reciterObj: this.reciters.find(rc => rc.id === r.reciter),
+        surahObj:   this.surahs.find(s => s.n === surahN),
+        maqamObj:   this.maqamat.find(m => m.id === r.maqam),
+        audioUrl:   this.getAudioUrl(r)
+      }));
+  },
+
+  // get recitations for a reciter
+  getRecitationsForReciter(reciterId) {
+    return this.recitations
+      .filter(r => r.reciter === reciterId)
+      .map(r => ({
+        ...r,
+        reciterObj: this.reciters.find(rc => rc.id === r.reciter),
+        surahObj:   this.surahs.find(s => s.n === r.surahN),
+        maqamObj:   this.maqamat.find(m => m.id === r.maqam),
+        audioUrl:   this.getAudioUrl(r)
+      }));
+  },
+
+  // get recitations by maqam
+  getRecitationsByMaqam(maqamId) {
+    return this.recitations
+      .filter(r => r.maqam === maqamId)
+      .map(r => ({
+        ...r,
+        reciterObj: this.reciters.find(rc => rc.id === r.reciter),
+        surahObj:   this.surahs.find(s => s.n === r.surahN),
+        maqamObj:   this.maqamat.find(m => m.id === r.maqam),
+        audioUrl:   this.getAudioUrl(r)
+      }));
+  },
+
+  // full-text search
+  search(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const results = [];
+    this.recitations.forEach(r => {
+      const reciter = this.reciters.find(rc => rc.id === r.reciter);
+      const surah   = this.surahs.find(s => s.n === r.surahN);
+      const maqam   = this.maqamat.find(m => m.id === r.maqam);
+      const haystack = [
+        reciter?.name, surah?.name, maqam?.name,
+        r.type, r.mosque, String(r.year)
+      ].join(" ").toLowerCase();
+      if (haystack.includes(q)) {
+        results.push({
+          ...r,
+          reciterObj: reciter,
+          surahObj:   surah,
+          maqamObj:   maqam,
+          audioUrl:   this.getAudioUrl(r)
+        });
+      }
+    });
+    return results;
+  }
+};
+</script>
+<script>// ============================================================
+// TILAWAT PLAYER — Professional Audio Engine
+// - Real HTML5 Audio
+// - Media Session API (lock screen / notifications)
+// - Background playback
+// - Save/restore last position (localStorage)
+// - Repeat, shuffle
+// ============================================================
+
+const Player = (() => {
+  const audio = new Audio();
+  audio.preload = "metadata";
+
+  let current = null;    // current recitation object
+  let queue   = [];      // playlist
+  let qIndex  = 0;
+  let repeat  = false;
+  let shuffle = false;
+
+  // ── DOM refs ─────────────────────────────────────────────
+  const el = {
+    bar:      () => document.getElementById("player-bar"),
+    title:    () => document.getElementById("np-title"),
+    sheikh:   () => document.getElementById("np-sheikh"),
+    maqam:    () => document.getElementById("np-maqam"),
+    playBtn:  () => document.getElementById("play-btn"),
+    progBar:  () => document.getElementById("prog-bar"),
+    progFill: () => document.getElementById("prog-fill"),
+    progDot:  () => document.getElementById("prog-dot"),
+    curTime:  () => document.getElementById("cur-time"),
+    totTime:  () => document.getElementById("tot-time"),
+    waveWrap: () => document.getElementById("wave-wrap"),
+    loading:  () => document.getElementById("np-loading"),
+  };
+
+  // ── Helpers ───────────────────────────────────────────────
+  function fmt(s) {
+    if (isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return m + ":" + (sec < 10 ? "0" : "") + sec;
+  }
+
+  function savePosition() {
+    if (!current || !audio.currentTime) return;
+    try {
+      const saves = JSON.parse(localStorage.getItem("tilawat_positions") || "{}");
+      saves[current.id] = audio.currentTime;
+      localStorage.setItem("tilawat_positions", JSON.stringify(saves));
+    } catch(e) {}
+  }
+
+  function restorePosition(id) {
+    try {
+      const saves = JSON.parse(localStorage.getItem("tilawat_positions") || "{}");
+      return saves[id] || 0;
+    } catch(e) { return 0; }
+  }
+
+  function saveLastPlayed() {
+    if (!current) return;
+    try { localStorage.setItem("tilawat_last", JSON.stringify(current)); } catch(e) {}
+  }
+
+  // ── Media Session API (lock screen) ──────────────────────
+  function updateMediaSession() {
+    if (!("mediaSession" in navigator) || !current) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:  current.surahObj?.name  || "تلاوة",
+      artist: current.reciterObj?.name || "تلاوات",
+      album:  "منصة تلاوات",
+      artwork: [{ src: "https://via.placeholder.com/512/0a0d1a/c9a84c?text=☽", sizes: "512x512", type: "image/png" }]
+    });
+    navigator.mediaSession.setActionHandler("play",          () => resume());
+    navigator.mediaSession.setActionHandler("pause",         () => pause());
+    navigator.mediaSession.setActionHandler("previoustrack", () => prev());
+    navigator.mediaSession.setActionHandler("nexttrack",     () => next());
+    navigator.mediaSession.setActionHandler("seekbackward",  () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+    navigator.mediaSession.setActionHandler("seekforward",   () => { audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); });
+  }
+
+  // ── Audio events ──────────────────────────────────────────
+  audio.addEventListener("loadstart", () => {
+    setLoading(true);
+  });
+
+  audio.addEventListener("canplay", () => {
+    setLoading(false);
+    el.totTime() && (el.totTime().textContent = fmt(audio.duration));
+    const saved = restorePosition(current?.id);
+    if (saved > 0 && saved < audio.duration - 5) {
+      audio.currentTime = saved;
+      showToast("▶ استُؤنف من " + fmt(saved));
+    }
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    el.progFill() && (el.progFill().style.width = pct + "%");
+    el.progDot()  && (el.progDot().style.right = (100 - pct) + "%");
+    el.curTime()  && (el.curTime().textContent = fmt(audio.currentTime));
+    savePosition();
+    if ("mediaSession" in navigator && audio.duration) {
+      navigator.mediaSession.setPositionState({
+        duration:     audio.duration,
+        playbackRate: audio.playbackRate,
+        position:     audio.currentTime
+      });
+    }
+  });
+
+  audio.addEventListener("ended", () => {
+    if (repeat) { audio.currentTime = 0; audio.play(); }
+    else next();
+  });
+
+  audio.addEventListener("error", () => {
+    setLoading(false);
+    showToast("⚠️ تعذّر تحميل الصوت — تحقق من الاتصال");
+    setPlayIcon(false);
+  });
+
+  audio.addEventListener("waiting", () => setLoading(true));
+  audio.addEventListener("playing", () => {
+    setLoading(false);
+    setPlayIcon(true);
+    el.bar()?.classList.add("playing");
+    el.waveWrap()?.classList.add("active");
+  });
+
+  audio.addEventListener("pause", () => {
+    setPlayIcon(false);
+    el.bar()?.classList.remove("playing");
+    el.waveWrap()?.classList.remove("active");
+  });
+
+  // ── UI helpers ────────────────────────────────────────────
+  function setLoading(on) {
+    el.loading()?.classList.toggle("show", on);
+  }
+
+  function setPlayIcon(playing) {
+    const btn = el.playBtn();
+    if (btn) btn.innerHTML = playing
+      ? `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg>`;
+  }
+
+  function updateUI() {
+    if (!current) return;
+    el.title()  && (el.title().textContent  = "سورة " + (current.surahObj?.name || ""));
+    el.sheikh() && (el.sheikh().textContent = current.reciterObj?.name || "");
+    el.maqam()  && (el.maqam().textContent  = current.maqamObj?.name  || "");
+    el.bar()?.classList.add("open");
+    el.curTime() && (el.curTime().textContent = "0:00");
+    el.progFill() && (el.progFill().style.width = "0%");
+    updateMediaSession();
+    saveLastPlayed();
+    document.dispatchEvent(new CustomEvent("tilawat:playing", { detail: current }));
+  }
+
+  // ── Public API ────────────────────────────────────────────
+  function play(recitation, newQueue) {
+    if (!recitation) return;
+    current = recitation;
+    if (newQueue) { queue = newQueue; qIndex = queue.findIndex(r => r.id === recitation.id); }
+    audio.src = recitation.audioUrl;
+    audio.load();
+    audio.play().catch(() => {
+      showToast("⚠️ الرجاء الضغط للتشغيل مرة أخرى");
+    });
+    updateUI();
+  }
+
+  function pause()  { audio.pause(); }
+  function resume() { audio.play(); }
+
+  function togglePlay() {
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+  }
+
+  function next() {
+    if (!queue.length) return;
+    if (shuffle) { qIndex = Math.floor(Math.random() * queue.length); }
+    else { qIndex = (qIndex + 1) % queue.length; }
+    play(queue[qIndex]);
+  }
+
+  function prev() {
+    if (audio.currentTime > 5) { audio.currentTime = 0; return; }
+    if (!queue.length) return;
+    qIndex = (qIndex - 1 + queue.length) % queue.length;
+    play(queue[qIndex]);
+  }
+
+  function seek(pct) {
+    if (audio.duration) audio.currentTime = (pct / 100) * audio.duration;
+  }
+
+  function setRepeat(on)  { repeat  = on; }
+  function setShuffle(on) { shuffle = on; }
+  function close() {
+    audio.pause();
+    audio.src = "";
+    current = null;
+    el.bar()?.classList.remove("open", "playing");
+  }
+
+  function getCurrent() { return current; }
+  function isPlaying()  { return !audio.paused; }
+
+  return { play, pause, resume, togglePlay, next, prev, seek, setRepeat, setShuffle, close, getCurrent, isPlaying };
+})();
+</script>
+<script>// ============================================================
+// TILAWAT ROUTER — Hash-based SPA navigation
+// ============================================================
+
+const Router = (() => {
+  const routes = {};
+
+  function on(path, handler) {
+    routes[path] = handler;
+  }
+
+  function navigate(path) {
+    window.location.hash = path;
+  }
+
+  function resolve() {
+    const hash  = window.location.hash.slice(1) || "/";
+    const parts = hash.split("/").filter(Boolean);
+    const base  = "/" + (parts[0] || "");
+    const param = parts[1] || null;
+
+    if (routes[base]) {
+      routes[base](param);
+    } else if (routes["*"]) {
+      routes["*"](hash);
+    }
+  }
+
+  window.addEventListener("hashchange", resolve);
+  window.addEventListener("load",       resolve);
+
+  return { on, navigate, resolve };
+})();
+</script>
+<script>// ============================================================
+// TILAWAT UI — Page renderers
+// ============================================================
+
+const UI = (() => {
+
+  const app = () => document.getElementById("app");
+
+  // ── Shared: recitation card ───────────────────────────────
+  function recCard(r, queue) {
+    const mColor = r.maqamObj?.color || "#c9a84c";
+    return `
+      <div class="rec-item" onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")}, null)'>
+        <div class="ri-num">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="ri-info">
+          <div class="ri-surah">${r.surahObj?.name || ""}</div>
+          <div class="ri-meta">
+            <span>${r.reciterObj?.name || ""}</span>
+            <span class="dot">·</span>
+            <span style="color:${mColor}">${r.maqamObj?.name || ""}</span>
+            <span class="dot">·</span>
+            <span>${r.type}</span>
+            <span class="dot">·</span>
+            <span>${r.year}</span>
+          </div>
+        </div>
+        <div class="ri-mq-badge" style="background:${mColor}22;color:${mColor};border-color:${mColor}44">${r.maqamObj?.name || ""}</div>
+      </div>`;
+  }
+
+  // ── Skeleton loader ───────────────────────────────────────
+  function skeleton(n = 6) {
+    return Array(n).fill(0).map(() => `
+      <div class="skeleton-item">
+        <div class="sk sk-icon"></div>
+        <div class="sk-lines"><div class="sk sk-line-l"></div><div class="sk sk-line-s"></div></div>
+      </div>`).join("");
+  }
+
+  // ── Page transition ───────────────────────────────────────
+  function transition(html) {
+    const el = app();
+    el.classList.add("page-exit");
+    setTimeout(() => {
+      el.innerHTML = html;
+      el.classList.remove("page-exit");
+      el.classList.add("page-enter");
+      setTimeout(() => el.classList.remove("page-enter"), 400);
+      initReveal();
+    }, 180);
+  }
+
+  // ── Reveal on scroll ─────────────────────────────────────
+  function initReveal() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("vis"); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.07 });
+    document.querySelectorAll(".rv:not(.vis)").forEach(el => obs.observe(el));
+    // animate maqam bars
+    document.querySelectorAll(".mq-bar[data-w]").forEach(b => {
+      setTimeout(() => b.style.width = b.dataset.w + "%", 300);
+    });
+  }
+
+  // ── HOME PAGE ─────────────────────────────────────────────
+  function renderHome() {
+    const stats = DB.getStats();
+    const featuredRecs = DB.recitations.slice(0, 6).map(r => ({
+      ...r,
+      reciterObj: DB.reciters.find(rc => rc.id === r.reciter),
+      surahObj:   DB.surahs.find(s => s.n === r.surahN),
+      maqamObj:   DB.maqamat.find(m => m.id === r.maqam),
+      audioUrl:   DB.getAudioUrl(r)
+    }));
+
+    const html = `
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-badge rv"><span class="bdot"></span> المنصة الذكية للتلاوات القرآنية</div>
+        <h1 class="hero-title rv" style="transition-delay:.08s">
+          <span class="acc">استمع.</span> اكتشف. تدبّر.
+        </h1>
+        <p class="hero-sub rv" style="transition-delay:.16s">أكبر أرشيف تلاوات قرآنية — صوت حقيقي، بحث ذكي، مقامات محللة</p>
+        <div class="hero-ctas rv" style="transition-delay:.24s">
+          <button class="btn-p" onclick="UI.playRandom()">🎧 تلاوة عشوائية</button>
+          <button class="btn-o" onclick="Router.navigate('/surahs')">📖 تصفح السور</button>
+        </div>
+        <div class="hero-stats rv" style="transition-delay:.32s">
+          <div class="stat"><span class="stat-n">${stats.reciters}</span><div class="stat-l">قارئ</div></div>
+          <div class="stat"><span class="stat-n">${stats.surahs}</span><div class="stat-l">سورة</div></div>
+          <div class="stat"><span class="stat-n">${stats.maqamat}</span><div class="stat-l">مقام</div></div>
+          <div class="stat"><span class="stat-n">${stats.recitations}</span><div class="stat-l">تلاوة</div></div>
+        </div>
+      </section>
+
+      <!-- SEARCH -->
+      <div class="srch-sec rv" style="transition-delay:.4s">
+        <div class="srch-box" id="srchBox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--txt3);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="srchInp" placeholder="ابحث: شيخ، سورة، مقام، نوع التلاوة..." oninput="UI.liveSearch()" onkeydown="if(event.key==='Enter')UI.doSearch()" />
+          <button class="srch-btn" onclick="UI.doSearch()">بحث</button>
+        </div>
+        <div class="hints">
+          <span class="hint" onclick="UI.setS('حجاز')">حجاز</span>
+          <span class="hint" onclick="UI.setS('محمد أيوب')">محمد أيوب</span>
+          <span class="hint" onclick="UI.setS('مريم')">سورة مريم</span>
+          <span class="hint" onclick="UI.setS('تهجد')">تهجد</span>
+          <span class="hint" onclick="UI.setS('تراويح')">تراويح</span>
+          <span class="hint" onclick="UI.setS('نهاوند')">نهاوند</span>
+        </div>
+        <div class="srch-results" id="srchResults"></div>
+      </div>
+
+      <!-- RECITERS -->
+      <section class="home-sec">
+        <div class="sec-head rv">
+          <div class="sec-tag">القراء</div>
+          <h2 class="sec-title">أئمة التلاوة</h2>
+        </div>
+        <div class="rec-grid">
+          ${DB.reciters.map((r,i) => `
+            <div class="rec-card rv" style="transition-delay:${.04+i*.06}s" onclick="Router.navigate('/reciter/${r.id}')">
+              <div class="rec-av" style="border-color:${r.color}44">${r.initials}</div>
+              <div class="rec-name">${r.name}</div>
+              <div class="rec-mq" style="color:${r.color};background:${r.color}18">${r.mainMaqam}</div>
+              <div class="rec-cnt">${DB.recitations.filter(x=>x.reciter===r.id).length} تلاوة</div>
+            </div>`).join("")}
+        </div>
+        <button class="sec-more" onclick="Router.navigate('/reciters')">عرض الكل ←</button>
+      </section>
+
+      <!-- MAQAMAT -->
+      <section class="home-sec mq-sec-bg">
+        <div class="sec-head rv">
+          <div class="sec-tag">المقامات</div>
+          <h2 class="sec-title">علم المقامات القرآنية</h2>
+        </div>
+        <div class="mq-grid">
+          ${DB.maqamat.map((m,i) => {
+            const cnt = DB.recitations.filter(r => r.maqam === m.id).length;
+            const pct = Math.round((cnt / DB.recitations.length) * 100) || 5;
+            return `
+            <div class="mq-card rv" style="transition-delay:${.04+i*.05}s" onclick="Router.navigate('/maqam/${m.id}')">
+              <div class="mq-glow" style="background:${m.color}"></div>
+              <div class="mq-ic">${m.icon}</div>
+              <div class="mq-name">${m.name}</div>
+              <div class="mq-desc">${m.desc}</div>
+              <div class="mq-bw"><div class="mq-bar" data-w="${pct}" style="background:linear-gradient(90deg,${m.color},${m.color}88);width:0%"></div></div>
+              <div class="mq-cnt">${cnt} تلاوة</div>
+            </div>`;
+          }).join("")}
+        </div>
+        <button class="sec-more" onclick="Router.navigate('/maqamat')">عرض الكل ←</button>
+      </section>
+
+      <!-- SURAHS PREVIEW -->
+      <section class="home-sec">
+        <div class="sec-head rv">
+          <div class="sec-tag">السور</div>
+          <h2 class="sec-title">سور القرآن الكريم</h2>
+        </div>
+        <div class="sur-grid">
+          ${DB.surahs.slice(0, 28).map((s,i) => {
+            const cnt = DB.recitations.filter(r => r.surahN === s.n).length;
+            return `
+            <div class="sur-card rv" style="transition-delay:${i*.015}s" onclick="Router.navigate('/surah/${s.n}')">
+              <div class="sur-num">${s.n}</div>
+              <div class="sur-info">
+                <div class="sur-name">${s.name}</div>
+                <div class="sur-ay">${s.ay} آية${cnt ? ` · ${cnt} تلاوة` : ""}</div>
+              </div>
+              <div class="sur-play">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+            </div>`;
+          }).join("")}
+        </div>
+        <button class="sec-more" onclick="Router.navigate('/surahs')">عرض الكل ١١٤ سورة ←</button>
+      </section>
+
+      <!-- FEATURED RECITATIONS -->
+      <section class="home-sec">
+        <div class="sec-head rv">
+          <div class="sec-tag">مختارة</div>
+          <h2 class="sec-title">تلاوات مميزة</h2>
+        </div>
+        <div class="feat-list">
+          ${featuredRecs.map((r,i) => `
+            <div class="feat-item rv" style="transition-delay:${i*.07}s" onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+              <div class="fi-thumb" style="background:linear-gradient(135deg,${r.maqamObj?.color||"#c9a84c"}22,#090c16)">
+                <div class="fi-play">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
+                <div class="fi-wave">${[...Array(12)].map((_,j)=>`<span style="animation-delay:${j*.08}s"></span>`).join("")}</div>
+              </div>
+              <div class="fi-body">
+                <div class="fi-tag" style="color:${r.maqamObj?.color||"#c9a84c"}">${r.maqamObj?.name||""} · ${r.type}</div>
+                <div class="fi-name">سورة ${r.surahObj?.name||""}</div>
+                <div class="fi-meta">${r.reciterObj?.name||""} · ${r.year}</div>
+              </div>
+            </div>`).join("")}
+        </div>
+      </section>`;
+
+    transition(html);
+  }
+
+  // ── SURAHS PAGE ───────────────────────────────────────────
+  function renderSurahs() {
+    const html = `
+      <div class="page-header rv">
+        <button class="back-btn" onclick="Router.navigate('/')">← رجوع</button>
+        <h1 class="page-title">سور القرآن الكريم</h1>
+        <p class="page-sub">${DB.surahs.length} سورة · ${DB.recitations.length} تلاوة متاحة</p>
+      </div>
+      <div class="filter-row rv">
+        <input type="text" class="filter-inp" id="surFilter" placeholder="ابحث في السور..." oninput="UI.filterSurahs()" />
+        <select class="filter-sel" id="juzFilter" onchange="UI.filterSurahs()">
+          <option value="">كل الأجزاء</option>
+          ${[...Array(30)].map((_,i)=>`<option value="${i+1}">الجزء ${i+1}</option>`).join("")}
+        </select>
+        <select class="filter-sel" id="typeFilter" onchange="UI.filterSurahs()">
+          <option value="">مكية ومدنية</option>
+          <option value="مكية">مكية</option>
+          <option value="مدنية">مدنية</option>
+        </select>
+      </div>
+      <div class="sur-grid-full" id="surGridFull">
+        ${DB.surahs.map((s,i) => {
+          const cnt = DB.recitations.filter(r => r.surahN === s.n).length;
+          return `
+          <div class="sur-card rv" style="transition-delay:${(i%20)*.02}s"
+               data-name="${s.name}" data-juz="${s.juz}" data-type="${s.type}"
+               onclick="Router.navigate('/surah/${s.n}')">
+            <div class="sur-num">${s.n}</div>
+            <div class="sur-info">
+              <div class="sur-name">${s.name}</div>
+              <div class="sur-ay">${s.ay} آية · جزء ${s.juz}${cnt ? ` · ${cnt} تلاوة` : ""}</div>
+            </div>
+            <div class="sur-badge ${s.type === 'مكية' ? 'mak' : 'mad'}">${s.type}</div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    transition(html);
+  }
+
+  function filterSurahs() {
+    const q   = (document.getElementById("surFilter")?.value || "").trim();
+    const juz = document.getElementById("juzFilter")?.value || "";
+    const typ = document.getElementById("typeFilter")?.value || "";
+    document.querySelectorAll("#surGridFull .sur-card").forEach(card => {
+      const name = card.dataset.name || "";
+      const j    = card.dataset.juz  || "";
+      const t    = card.dataset.type || "";
+      const show = (!q || name.includes(q))
+                && (!juz || j === juz)
+                && (!typ || t === typ);
+      card.style.display = show ? "" : "none";
+    });
+  }
+
+  // ── SURAH PAGE ────────────────────────────────────────────
+  function renderSurah(n) {
+    const surah = DB.surahs.find(s => s.n === +n);
+    if (!surah) { renderNotFound(); return; }
+    const recs = DB.getRecitationsForSurah(+n);
+    const html = `
+      <div class="page-header rv">
+        <button class="back-btn" onclick="Router.navigate('/surahs')">← السور</button>
+        <div class="ph-center">
+          <div class="surah-num-big">${surah.n}</div>
+          <div>
+            <h1 class="page-title" style="font-family:'Amiri',serif">${surah.name}</h1>
+            <p class="page-sub">${surah.ay} آية · جزء ${surah.juz} · ${surah.type}</p>
+          </div>
+        </div>
+      </div>
+      ${recs.length ? `
+        <div class="sec-head rv" style="margin-bottom:16px">
+          <div class="sec-tag">التلاوات المتاحة</div>
+          <h2 class="sec-title" style="font-size:22px">${recs.length} تلاوة</h2>
+        </div>
+        <div class="rec-list">
+          ${recs.map((r,i) => `
+            <div class="rec-item rv" style="transition-delay:${i*.06}s"
+                 onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")}, ${JSON.stringify(recs).replace(/'/g,"&#39;")})'>
+              <div class="ri-num">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="ri-info">
+                <div class="ri-surah">${r.reciterObj?.name || ""}</div>
+                <div class="ri-meta">
+                  <span style="color:${r.maqamObj?.color||'#c9a84c'}">${r.maqamObj?.name||""}</span>
+                  <span class="dot">·</span><span>${r.type}</span>
+                  <span class="dot">·</span><span>${r.mosque}</span>
+                  <span class="dot">·</span><span>${r.year}</span>
+                </div>
+              </div>
+              <div class="ri-mq-badge" style="background:${r.maqamObj?.color||"#c9a84c"}22;color:${r.maqamObj?.color||"#c9a84c"};border-color:${r.maqamObj?.color||"#c9a84c"}44">${r.maqamObj?.name||""}</div>
+            </div>`).join("")}
+        </div>` : `
+        <div class="empty-state rv">
+          <div class="es-icon">🎙️</div>
+          <div class="es-title">لا توجد تلاوات متاحة بعد</div>
+          <div class="es-desc">سيتم إضافة تلاوات هذه السورة قريباً</div>
+        </div>`}`;
+    transition(html);
+  }
+
+  // ── RECITERS PAGE ─────────────────────────────────────────
+  function renderReciters() {
+    const html = `
+      <div class="page-header rv">
+        <button class="back-btn" onclick="Router.navigate('/')">← رجوع</button>
+        <h1 class="page-title">القراء</h1>
+        <p class="page-sub">${DB.reciters.length} قارئ</p>
+      </div>
+      <div class="rec-grid-full">
+        ${DB.reciters.map((r,i) => {
+          const cnt = DB.recitations.filter(x => x.reciter === r.id).length;
+          return `
+          <div class="rec-card rv" style="transition-delay:${.04+i*.07}s" onclick="Router.navigate('/reciter/${r.id}')">
+            <div class="rec-av" style="border-color:${r.color}55">${r.initials}</div>
+            <div class="rec-name">${r.name}</div>
+            <div class="rec-mq" style="color:${r.color};background:${r.color}18">${r.mainMaqam}</div>
+            <div class="rec-bio">${r.bio}</div>
+            <div class="rec-cnt">${cnt} تلاوة</div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    transition(html);
+  }
+
+  // ── RECITER PAGE ──────────────────────────────────────────
+  function renderReciter(id) {
+    const reciter = DB.reciters.find(r => r.id === id);
+    if (!reciter) { renderNotFound(); return; }
+    const recs = DB.getRecitationsForReciter(id);
+    const byType = {};
+    recs.forEach(r => { (byType[r.type] = byType[r.type] || []).push(r); });
+
+    const html = `
+      <div class="reciter-header rv">
+        <button class="back-btn" onclick="Router.navigate('/reciters')">← القراء</button>
+        <div class="rh-inner">
+          <div class="rh-av" style="border-color:${reciter.color}66;box-shadow:0 0 40px ${reciter.color}22">${reciter.initials}</div>
+          <div class="rh-info">
+            <div class="rh-country">${reciter.country}</div>
+            <h1 class="rh-name">${reciter.name}</h1>
+            <p class="rh-bio">${reciter.bio}</p>
+            <div class="rh-tags">
+              ${reciter.maqamat.map(m=>`<span class="rh-tag" style="color:${reciter.color};background:${reciter.color}18">${m}</span>`).join("")}
+            </div>
+            <div class="rh-stats">
+              <div class="rhs"><span>${recs.length}</span>تلاوة</div>
+              <div class="rhs"><span>${new Set(recs.map(r=>r.surahN)).size}</span>سورة</div>
+              <div class="rhs"><span>${reciter.maqamat.length}</span>مقام</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${Object.keys(byType).map(type => `
+        <div class="type-section rv">
+          <div class="type-head">
+            <span class="type-label">${type}</span>
+            <span class="type-cnt">${byType[type].length}</span>
+          </div>
+          <div class="rec-list">
+            ${byType[type].map((r,i) => `
+              <div class="rec-item rv" style="transition-delay:${i*.05}s"
+                   onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")}, ${JSON.stringify(byType[type]).replace(/'/g,"&#39;")})'>
+                <div class="ri-num"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg></div>
+                <div class="ri-info">
+                  <div class="ri-surah">سورة ${r.surahObj?.name||""}</div>
+                  <div class="ri-meta">
+                    <span style="color:${r.maqamObj?.color||'#c9a84c'}">${r.maqamObj?.name||""}</span>
+                    <span class="dot">·</span><span>${r.mosque}</span>
+                    <span class="dot">·</span><span>${r.year}</span>
+                  </div>
+                </div>
+                <div class="ri-mq-badge" style="background:${r.maqamObj?.color||"#c9a84c"}22;color:${r.maqamObj?.color||"#c9a84c"};border-color:${r.maqamObj?.color||"#c9a84c"}44">${r.maqamObj?.name||""}</div>
+              </div>`).join("")}
+          </div>
+        </div>`).join("")}
+      ${!recs.length ? `<div class="empty-state rv"><div class="es-icon">🎙️</div><div class="es-title">لا توجد تلاوات بعد</div></div>` : ""}`;
+    transition(html);
+  }
+
+  // ── MAQAMAT PAGE ──────────────────────────────────────────
+  function renderMaqamat() {
+    const html = `
+      <div class="page-header rv">
+        <button class="back-btn" onclick="Router.navigate('/')">← رجوع</button>
+        <h1 class="page-title">المقامات القرآنية</h1>
+        <p class="page-sub">الأصول الثمانية للتلاوة</p>
+      </div>
+      <div class="mq-grid-full">
+        ${DB.maqamat.map((m,i) => {
+          const cnt = DB.recitations.filter(r => r.maqam === m.id).length;
+          const reciters = [...new Set(DB.recitations.filter(r=>r.maqam===m.id).map(r=>r.reciter))]
+            .map(id => DB.reciters.find(r=>r.id===id)).filter(Boolean);
+          return `
+          <div class="mq-card-full rv" style="transition-delay:${.04+i*.06}s" onclick="Router.navigate('/maqam/${m.id}')">
+            <div class="mq-glow" style="background:${m.color}"></div>
+            <div class="mqf-head">
+              <span class="mqf-ic">${m.icon}</span>
+              <div>
+                <div class="mqf-name">${m.name}</div>
+                <div class="mqf-cnt">${cnt} تلاوة</div>
+              </div>
+            </div>
+            <p class="mqf-desc">${m.desc}</p>
+            <div class="mqf-reciters">
+              ${reciters.slice(0,4).map(r=>`<div class="mqf-rec-chip" style="border-color:${r.color}44;color:${r.color}">${r.initials}</div>`).join("")}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    transition(html);
+  }
+
+  // ── MAQAM PAGE ────────────────────────────────────────────
+  function renderMaqam(id) {
+    const maqam = DB.maqamat.find(m => m.id === id);
+    if (!maqam) { renderNotFound(); return; }
+    const recs = DB.getRecitationsByMaqam(id);
+    const byReciter = {};
+    recs.forEach(r => { (byReciter[r.reciter] = byReciter[r.reciter] || []).push(r); });
+
+    const html = `
+      <div class="maqam-header rv" style="border-bottom-color:${maqam.color}33">
+        <button class="back-btn" onclick="Router.navigate('/maqamat')">← المقامات</button>
+        <div class="mqh-glow" style="background:${maqam.color}"></div>
+        <div class="mqh-ic">${maqam.icon}</div>
+        <h1 class="mqh-name" style="color:${maqam.color}">مقام ${maqam.name}</h1>
+        <p class="mqh-desc">${maqam.desc}</p>
+        <div class="mqh-stats">
+          <div class="stat"><span class="stat-n" style="color:${maqam.color}">${recs.length}</span><div class="stat-l">تلاوة</div></div>
+          <div class="stat"><span class="stat-n" style="color:${maqam.color}">${Object.keys(byReciter).length}</span><div class="stat-l">قارئ</div></div>
+        </div>
+      </div>
+      ${Object.keys(byReciter).map(rid => {
+        const reciter = DB.reciters.find(r => r.id === rid);
+        const recRecs = byReciter[rid];
+        return `
+        <div class="type-section rv">
+          <div class="type-head">
+            <span class="type-label" style="cursor:pointer" onclick="Router.navigate('/reciter/${rid}')">${reciter?.name || rid}</span>
+            <span class="type-cnt">${recRecs.length}</span>
+          </div>
+          <div class="rec-list">
+            ${recRecs.map((r,i) => `
+              <div class="rec-item rv" style="transition-delay:${i*.05}s"
+                   onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")}, ${JSON.stringify(recRecs).replace(/'/g,"&#39;")})'>
+                <div class="ri-num"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg></div>
+                <div class="ri-info">
+                  <div class="ri-surah">سورة ${r.surahObj?.name||""}</div>
+                  <div class="ri-meta">
+                    <span>${r.type}</span><span class="dot">·</span>
+                    <span>${r.mosque}</span><span class="dot">·</span><span>${r.year}</span>
+                  </div>
+                </div>
+              </div>`).join("")}
+          </div>
+        </div>`;
+      }).join("")}
+      ${!recs.length ? `<div class="empty-state rv"><div class="es-icon">🎵</div><div class="es-title">لا توجد تلاوات بعد</div></div>` : ""}`;
+    transition(html);
+  }
+
+  // ── SEARCH PAGE ───────────────────────────────────────────
+  function renderSearch(query) {
+    const results = DB.search(query || "");
+    const html = `
+      <div class="page-header rv">
+        <button class="back-btn" onclick="Router.navigate('/')">← رجوع</button>
+        <h1 class="page-title">نتائج البحث</h1>
+        <p class="page-sub">"${query}" · ${results.length} نتيجة</p>
+      </div>
+      <div class="rec-list">
+        ${results.length
+          ? results.map((r,i) => `
+            <div class="rec-item rv" style="transition-delay:${i*.04}s"
+                 onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")}, ${JSON.stringify(results).replace(/'/g,"&#39;")})'>
+              <div class="ri-num"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg></div>
+              <div class="ri-info">
+                <div class="ri-surah">سورة ${r.surahObj?.name||""}</div>
+                <div class="ri-meta">
+                  <span>${r.reciterObj?.name||""}</span><span class="dot">·</span>
+                  <span style="color:${r.maqamObj?.color||'#c9a84c'}">${r.maqamObj?.name||""}</span>
+                  <span class="dot">·</span><span>${r.type}</span>
+                  <span class="dot">·</span><span>${r.year}</span>
+                </div>
+              </div>
+              <div class="ri-mq-badge" style="background:${r.maqamObj?.color||"#c9a84c"}22;color:${r.maqamObj?.color||"#c9a84c"};border-color:${r.maqamObj?.color||"#c9a84c"}44">${r.maqamObj?.name||""}</div>
+            </div>`).join("")
+          : `<div class="empty-state rv"><div class="es-icon">🔍</div><div class="es-title">لا توجد نتائج</div><div class="es-desc">جرّب البحث بكلمات مختلفة</div></div>`}
+      </div>`;
+    transition(html);
+  }
+
+  // ── 404 ───────────────────────────────────────────────────
+  function renderNotFound() {
+    transition(`<div class="empty-state" style="min-height:60vh"><div class="es-icon">🌙</div><div class="es-title">الصفحة غير موجودة</div><button class="btn-p" style="margin-top:20px" onclick="Router.navigate('/')">العودة للرئيسية</button></div>`);
+  }
+
+  // ── Live search ───────────────────────────────────────────
+  function liveSearch() {
+    const q = document.getElementById("srchInp")?.value.trim();
+    const box = document.getElementById("srchResults");
+    if (!box) return;
+    if (!q) { box.innerHTML = ""; return; }
+    const res = DB.search(q).slice(0, 5);
+    if (!res.length) { box.innerHTML = `<div class="srch-no-res">لا نتائج لـ "${q}"</div>`; return; }
+    box.innerHTML = res.map(r => `
+      <div class="srch-item" onclick='UI.playRec(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="color:${r.maqamObj?.color||'#c9a84c'}"><polygon points="5,3 19,12 5,21"/></svg>
+        <div>
+          <span style="color:var(--txt)">سورة ${r.surahObj?.name||""}</span>
+          <span class="dot">·</span>
+          <span style="color:var(--txt2)">${r.reciterObj?.name||""}</span>
+          <span class="dot">·</span>
+          <span style="color:${r.maqamObj?.color||'#c9a84c'}">${r.maqamObj?.name||""}</span>
+        </div>
+      </div>`).join("") +
+      (DB.search(q).length > 5 ? `<div class="srch-more" onclick="Router.navigate('/search/${encodeURIComponent(q)}')">عرض كل النتائج (${DB.search(q).length}) →</div>` : "");
+  }
+
+  function doSearch() {
+    const q = document.getElementById("srchInp")?.value.trim();
+    if (q) Router.navigate("/search/" + encodeURIComponent(q));
+  }
+
+  function setS(v) {
+    const inp = document.getElementById("srchInp");
+    if (inp) { inp.value = v; liveSearch(); inp.focus(); }
+  }
+
+  // ── Play helpers ──────────────────────────────────────────
+  function playRec(rec, queue) {
+    Player.play(rec, queue || [rec]);
+    showToast("▶ سورة " + (rec.surahObj?.name || "") + " — " + (rec.reciterObj?.name || ""));
+  }
+
+  function playRandom() {
+    const r = DB.recitations;
+    const rec = r[Math.floor(Math.random() * r.length)];
+    const full = {
+      ...rec,
+      reciterObj: DB.reciters.find(x => x.id === rec.reciter),
+      surahObj:   DB.surahs.find(x => x.n === rec.surahN),
+      maqamObj:   DB.maqamat.find(x => x.id === rec.maqam),
+      audioUrl:   DB.getAudioUrl(rec)
+    };
+    playRec(full, null);
+  }
+
+  return {
+    renderHome, renderSurahs, renderSurah, renderReciters, renderReciter,
+    renderMaqamat, renderMaqam, renderSearch, renderNotFound,
+    filterSurahs, liveSearch, doSearch, setS, playRec, playRandom, initReveal
+  };
+})();
+</script>
+<script>
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toastT);window._toastT=setTimeout(()=>t.classList.remove("show"),2600);}
+function focusSrch(){Router.navigate("/");setTimeout(()=>{const inp=document.getElementById("srchInp");if(inp){inp.focus();inp.scrollIntoView({behavior:"smooth",block:"center"});}},200);}
+let _repeat=false;
+function toggleRepeat(){_repeat=!_repeat;Player.setRepeat(_repeat);const btn=document.getElementById("repeat-btn");btn.style.color=_repeat?"var(--gold)":"";btn.style.borderColor=_repeat?"var(--gold)":"";showToast(_repeat?"🔁 التكرار مفعّل":"التكرار معطّل");}
+function seekClick(e){const bar=document.getElementById("prog-track");const rect=bar.getBoundingClientRect();const pct=((e.clientX-rect.left)/rect.width)*100;Player.seek(Math.max(0,Math.min(100,pct)));}
+function toggleMnav(){const m=document.getElementById("mnav"),h=document.getElementById("hburg");const open=m.classList.toggle("open");h.classList.toggle("open",open);}
+function closeMnav(){document.getElementById("mnav").classList.remove("open");document.getElementById("hburg").classList.remove("open");}
+document.addEventListener("click",e=>{if(!e.target.closest("#mnav")&&!e.target.closest("#hburg"))closeMnav();});
+window.addEventListener("scroll",()=>{document.getElementById("navbar").classList.toggle("scrolled",window.scrollY>20);});
+function setActiveNav(path){document.querySelectorAll(".nav-links a").forEach(a=>a.classList.remove("act"));const map={"/":"nl-home","/reciters":"nl-reciters","/surahs":"nl-surahs","/maqamat":"nl-maqamat"};const base="/"+(path.split("/").filter(Boolean)[0]||"");const id=map[base]||map["/"];document.getElementById(id)?.classList.add("act");}
+Router.on("/",()=>{UI.renderHome();setActiveNav("/");});
+Router.on("/reciters",()=>{UI.renderReciters();setActiveNav("/reciters");});
+Router.on("/reciter",(id)=>{UI.renderReciter(id);setActiveNav("/reciters");});
+Router.on("/surahs",()=>{UI.renderSurahs();setActiveNav("/surahs");});
+Router.on("/surah",(n)=>{UI.renderSurah(n);setActiveNav("/surahs");});
+Router.on("/maqamat",()=>{UI.renderMaqamat();setActiveNav("/maqamat");});
+Router.on("/maqam",(id)=>{UI.renderMaqam(id);setActiveNav("/maqamat");});
+Router.on("/search",(q)=>{UI.renderSearch(decodeURIComponent(q||""));setActiveNav("/");});
+Router.on("*",()=>UI.renderNotFound());
+Router.resolve();
+</script>
+</body>
+</html>
