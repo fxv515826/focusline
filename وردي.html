@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وردي — من فاطر إلى البقرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#FBF7EC;
+    --parchment-deep:#F3ECDC;
+    --ink:#2A2118;
+    --ink-soft:#5B4E3F;
+    --green:#1F4B3F;
+    --green-deep:#153730;
+    --gold:#B98B4E;
+    --gold-soft:#E7D3AC;
+    --done-bg:#E4EFE6;
+    --line:#E4DAC5;
+    --shadow: 0 2px 14px rgba(42,33,24,0.06);
+    --ease: cubic-bezier(.4,0,.2,1);
+    --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+  }
+  html{scroll-behavior:smooth;}
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; outline:none;}
+  .check, .surah-head, .day-row{-webkit-user-select:none; user-select:none;}
+  .check:focus, .check:focus-visible, .surah-head:focus, button:focus{outline:none; box-shadow:none;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Tajawal', sans-serif;
+    min-height:100vh;
+    padding-bottom:80px;
+  }
+  /* subtle geometric texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(185,139,78,0.05) 0, transparent 45%),
+      radial-gradient(circle at 90% 92%, rgba(31,75,63,0.05) 0, transparent 45%);
+    pointer-events:none; z-index:0;
+  }
+
+  header.top{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(180deg, var(--green-deep), var(--green));
+    color:#F6EFDE;
+    padding:22px 18px 18px;
+    border-bottom:3px solid var(--gold);
+    box-shadow:var(--shadow);
+  }
+  .title-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
+  h1{
+    font-family:'Amiri', serif;
+    font-size:26px; font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .subtitle{
+    font-size:12.5px; color:var(--gold-soft); font-weight:400; margin-top:2px;
+  }
+  .today-pill{
+    font-size:11.5px; background:rgba(246,239,222,0.1);
+    border:1px solid rgba(246,239,222,0.25);
+    border-radius:20px; padding:5px 11px; white-space:nowrap;
+    text-align:center; line-height:1.5;
+  }
+  .today-pill b{display:block; font-size:12.5px;}
+
+  .progress-wrap{margin-top:16px;}
+  .progress-labels{display:flex; justify-content:space-between; font-size:12px; color:var(--gold-soft); margin-bottom:6px;}
+  .progress-labels b{color:#fff; font-weight:700;}
+  .bar-track{
+    height:10px; border-radius:6px; background:rgba(246,239,222,0.15); overflow:hidden;
+    position:relative;
+  }
+  .bar-fill{
+    height:100%; border-radius:6px;
+    background:linear-gradient(90deg, var(--gold), #D9B378);
+    transition:width .8s var(--ease);
+  }
+
+  main{max-width:640px; margin:0 auto; padding:18px 14px; position:relative; z-index:1;}
+
+  /* Tasbih rail */
+  .rail{
+    position:absolute; top:18px; bottom:18px; right:6px; width:2px;
+    background:repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px);
+    z-index:0; display:none;
+  }
+  @media(min-width:520px){ .rail{display:block;} main{padding-right:26px;} }
+
+  .surah-section{
+    margin-bottom:14px; border-radius:14px; overflow:hidden;
+    background:#fff; box-shadow:var(--shadow); border:1px solid var(--line);
+    opacity:0; transform:translateY(10px);
+    animation:riseIn .5s var(--ease) forwards;
+  }
+  @keyframes riseIn{ to{opacity:1; transform:translateY(0);} }
+  .surah-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:14px 16px; cursor:pointer; user-select:none;
+    background:var(--parchment-deep);
+    transition:background .25s var(--ease), transform .15s var(--ease);
+  }
+  .surah-head:active{background:var(--gold-soft); transform:scale(.99);}
+  .surah-head-l{display:flex; align-items:center; gap:10px; min-width:0;}
+  .bead{
+    width:13px; height:13px; border-radius:50%; flex:none;
+    border:2px solid var(--gold); background:#fff;
+    transition:background .4s var(--ease), border-color .4s var(--ease), transform .4s var(--ease-bounce);
+  }
+  .bead.full{background:var(--gold); border-color:var(--gold); transform:scale(1.15);}
+  .surah-name{font-family:'Amiri', serif; font-weight:700; font-size:19px; color:var(--green-deep);}
+  .surah-meta{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .surah-head-r{display:flex; align-items:center; gap:8px; flex:none;}
+  .surah-progress-txt{font-size:11.5px; color:var(--ink-soft); font-weight:700;}
+  .chev{
+    width:9px; height:9px; border-right:2px solid var(--ink-soft); border-bottom:2px solid var(--ink-soft);
+    transform:rotate(45deg); transition:transform .35s var(--ease); flex:none;
+  }
+  .surah-section.open .chev{transform:rotate(-135deg);}
+
+  .days{max-height:0; opacity:0; overflow:hidden; transition:max-height .45s var(--ease), opacity .35s var(--ease);}
+  .surah-section.open .days{max-height:6000px; opacity:1;}
+
+  .day-row{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 16px; border-top:1px solid var(--line);
+    transition:background .3s var(--ease);
+  }
+  .day-row.done{background:var(--done-bg);}
+  .day-row:active{background:var(--parchment-deep);}
+  .check{
+    width:24px; height:24px; border-radius:7px; border:2px solid var(--green);
+    flex:none; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:background .25s var(--ease), border-color .25s var(--ease), transform .3s var(--ease-bounce);
+  }
+  .check:active{transform:scale(.85);}
+  .check.on{background:var(--green); animation:pop .35s var(--ease-bounce);}
+  @keyframes pop{ 0%{transform:scale(.7);} 60%{transform:scale(1.15);} 100%{transform:scale(1);} }
+  .check svg{width:14px; height:14px; opacity:0; transition:opacity .2s var(--ease) .05s;}
+  .check.on svg{opacity:1;}
+  .day-info{flex:1; min-width:0;}
+  .day-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;}
+  .day-num{font-size:11px; color:#fff; background:var(--green); border-radius:5px; padding:1px 7px; font-weight:700;}
+  .weekday-tag{font-size:11px; font-weight:700; color:var(--green); background:var(--done-bg); border-radius:6px; padding:2px 8px;}
+  .day-dates{font-size:12px; color:var(--ink-soft); line-height:1.5;}
+  .day-dates .hijri{color:var(--ink); font-weight:700; display:block;}
+  .day-dates .greg{display:block; font-size:11px; color:var(--ink-soft); margin-top:1px;}
+  .day-range{font-size:14px; margin-top:3px;}
+  .day-range b{color:var(--green-deep); font-weight:700;}
+  .day-pages{
+    font-size:10.5px; color:var(--gold); font-weight:700; flex:none;
+    background:#fbf2e3; border:1px solid var(--gold-soft); border-radius:8px; padding:4px 7px; text-align:center;
+    max-width:88px; line-height:1.4;
+  }
+  .day-row.today{
+    outline:2px solid var(--gold); outline-offset:-2px;
+  }
+  .day-row.locked{background:#F0EAD9;}
+  .check.locked{cursor:default; opacity:.85;}
+  .locked-tag{background:var(--gold-soft); color:var(--ink-soft);}
+
+  footer.note{
+    max-width:640px; margin:20px auto 0; padding:14px 18px; font-size:11.5px;
+    color:var(--ink-soft); text-align:center; line-height:1.9;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="title-row">
+    <div>
+      <h1>وردي اليومي</h1>
+      <div class="subtitle">من سورة فاطر إلى سورة البقرة</div>
+    </div>
+    <div class="today-pill"><span id="todayLabel">اليوم</span><b id="todayDate">—</b><span id="todayGreg" style="font-size:10.5px; opacity:.8;"></span></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-labels"><span>التقدّم</span><b id="progressTxt">٠ من ٤٣٩ صفحة</b></div>
+    <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<main>
+  <div class="rail"></div>
+  <div id="sections"></div>
+</main>
+
+<footer class="note">
+  التواريخ الهجرية محسوبة تقويميًا وقد تختلف يوم عن رؤية الهلال الرسمية · مصحف المدينة النبوية ٦٠٤ صفحة
+</footer>
+
+<script>
+const DATA = [{"day": 0, "weekday": "—", "greg": "", "hijri": "قبل الجدول", "weight": 35.0, "pages": "فاطر + سبأ + الأحزاب + السجدة + لقمان + الروم (٤٠٤-٤٠٩)", "from": "فاطر (1)", "to": "الروم (59)", "juz": "21-22", "done": true, "surahNum": 30, "surahName": "الروم"}, {"day": 1, "weekday": "الجمعة", "greg": "2026-10-16", "hijri": "5 جمادى الأولى 1448", "weight": 2.5, "pages": "410 + نص 396 + 397", "from": "الروم (51)", "to": "العنكبوت (14)", "juz": "21-20", "done": false, "surahNum": 30, "surahName": "الروم"}, {"day": 2, "weekday": "السبت", "greg": "2026-10-17", "hijri": "6 جمادى الأولى 1448", "weight": 2.0, "pages": "398 + 399", "from": "العنكبوت (15)", "to": "العنكبوت (30)", "juz": "20", "done": false, "surahNum": 29, "surahName": "العنكبوت"}, {"day": 3, "weekday": "الأحد", "greg": "2026-10-18", "hijri": "7 جمادى الأولى 1448", "weight": 2.0, "pages": "400 + 401", "from": "العنكبوت (31)", "to": "العنكبوت (45)", "juz": "20", "done": false, "surahNum": 29, "surahName": "العنكبوت"}, {"day": 4, "weekday": "الإثنين", "greg": "2026-10-19", "hijri": "8 جمادى الأولى 1448", "weight": 2.0, "pages": "402 + 403", "from": "العنكبوت (46)", "to": "العنكبوت (63)", "juz": "21", "done": false, "surahNum": 29, "surahName": "العنكبوت"}, {"day": 5, "weekday": "الثلاثاء", "greg": "2026-10-20", "hijri": "9 جمادى الأولى 1448", "weight": 2.5, "pages": "404 + نص 385 + 386", "from": "العنكبوت (64)", "to": "القصص (13)", "juz": "21-20", "done": false, "surahNum": 29, "surahName": "العنكبوت"}, {"day": 6, "weekday": "الأربعاء", "greg": "2026-10-21", "hijri": "10 جمادى الأولى 1448", "weight": 2.0, "pages": "387 + 388", "from": "القصص (14)", "to": "القصص (28)", "juz": "20", "done": false, "surahNum": 28, "surahName": "القصص"}, {"day": 7, "weekday": "الخميس", "greg": "2026-10-22", "hijri": "11 جمادى الأولى 1448", "weight": 2.0, "pages": "389 + 390", "from": "القصص (29)", "to": "القصص (43)", "juz": "20", "done": false, "surahNum": 28, "surahName": "القصص"}, {"day": 8, "weekday": "الجمعة", "greg": "2026-10-23", "hijri": "12 جمادى الأولى 1448", "weight": 2.0, "pages": "391 + 392", "from": "القصص (44)", "to": "القصص (59)", "juz": "20", "done": false, "surahNum": 28, "surahName": "القصص"}, {"day": 9, "weekday": "السبت", "greg": "2026-10-24", "hijri": "13 جمادى الأولى 1448", "weight": 2.0, "pages": "393 + 394", "from": "القصص (60)", "to": "القصص (77)", "juz": "20", "done": false, "surahNum": 28, "surahName": "القصص"}, {"day": 10, "weekday": "الأحد", "greg": "2026-10-25", "hijri": "14 جمادى الأولى 1448", "weight": 2.5, "pages": "395 + نص 396 + 377", "from": "القصص (78)", "to": "النمل (13)", "juz": "20-19", "done": false, "surahNum": 28, "surahName": "القصص"}, {"day": 11, "weekday": "الإثنين", "greg": "2026-10-26", "hijri": "15 جمادى الأولى 1448", "weight": 2.0, "pages": "378 + 379", "from": "النمل (14)", "to": "النمل (35)", "juz": "19", "done": false, "surahNum": 27, "surahName": "النمل"}, {"day": 12, "weekday": "الثلاثاء", "greg": "2026-10-27", "hijri": "16 جمادى الأولى 1448", "weight": 2.0, "pages": "380 + 381", "from": "النمل (36)", "to": "النمل (55)", "juz": "19", "done": false, "surahNum": 27, "surahName": "النمل"}, {"day": 13, "weekday": "الأربعاء", "greg": "2026-10-28", "hijri": "17 جمادى الأولى 1448", "weight": 2.0, "pages": "382 + 383", "from": "النمل (56)", "to": "النمل (76)", "juz": "20", "done": false, "surahNum": 27, "surahName": "النمل"}, {"day": 14, "weekday": "الخميس", "greg": "2026-10-29", "hijri": "18 جمادى الأولى 1448", "weight": 2.5, "pages": "384 + نص 385 + 367", "from": "النمل (77)", "to": "الشعراء (19)", "juz": "20-19", "done": false, "surahNum": 27, "surahName": "النمل"}, {"day": 15, "weekday": "الجمعة", "greg": "2026-10-30", "hijri": "19 جمادى الأولى 1448", "weight": 2.0, "pages": "368 + 369", "from": "الشعراء (20)", "to": "الشعراء (60)", "juz": "19", "done": false, "surahNum": 26, "surahName": "الشعراء"}, {"day": 16, "weekday": "السبت", "greg": "2026-10-31", "hijri": "20 جمادى الأولى 1448", "weight": 2.0, "pages": "370 + 371", "from": "الشعراء (61)", "to": "الشعراء (111)", "juz": "19", "done": false, "surahNum": 26, "surahName": "الشعراء"}, {"day": 17, "weekday": "الأحد", "greg": "2026-11-01", "hijri": "21 جمادى الأولى 1448", "weight": 2.0, "pages": "372 + 373", "from": "الشعراء (112)", "to": "الشعراء (159)", "juz": "19", "done": false, "surahNum": 26, "surahName": "الشعراء"}, {"day": 18, "weekday": "الإثنين", "greg": "2026-11-02", "hijri": "22 جمادى الأولى 1448", "weight": 2.0, "pages": "374 + 375", "from": "الشعراء (160)", "to": "الشعراء (206)", "juz": "19", "done": false, "surahNum": 26, "surahName": "الشعراء"}, {"day": 19, "weekday": "الثلاثاء", "greg": "2026-11-03", "hijri": "23 جمادى الأولى 1448", "weight": 2.5, "pages": "376 + نص 359 + 360", "from": "الشعراء (207)", "to": "الفرقان (11)", "juz": "19-18", "done": false, "surahNum": 26, "surahName": "الشعراء"}, {"day": 20, "weekday": "الأربعاء", "greg": "2026-11-04", "hijri": "24 جمادى الأولى 1448", "weight": 2.0, "pages": "361 + 362", "from": "الفرقان (12)", "to": "الفرقان (32)", "juz": "18-19", "done": false, "surahNum": 25, "surahName": "الفرقان"}, {"day": 21, "weekday": "الخميس", "greg": "2026-11-05", "hijri": "25 جمادى الأولى 1448", "weight": 2.0, "pages": "363 + 364", "from": "الفرقان (33)", "to": "الفرقان (55)", "juz": "19", "done": false, "surahNum": 25, "surahName": "الفرقان"}, {"day": 22, "weekday": "الجمعة", "greg": "2026-11-06", "hijri": "26 جمادى الأولى 1448", "weight": 2.0, "pages": "365 + 366", "from": "الفرقان (56)", "to": "الفرقان (77)", "juz": "19", "done": false, "surahNum": 25, "surahName": "الفرقان"}, {"day": 23, "weekday": "السبت", "greg": "2026-11-07", "hijri": "27 جمادى الأولى 1448", "weight": 2.0, "pages": "350 + 351", "from": "النور (1)", "to": "النور (20)", "juz": "18", "done": false, "surahNum": 24, "surahName": "النور"}, {"day": 24, "weekday": "الأحد", "greg": "2026-11-08", "hijri": "28 جمادى الأولى 1448", "weight": 2.0, "pages": "352 + 353", "from": "النور (21)", "to": "النور (31)", "juz": "18", "done": false, "surahNum": 24, "surahName": "النور"}, {"day": 25, "weekday": "الإثنين", "greg": "2026-11-09", "hijri": "29 جمادى الأولى 1448", "weight": 2.0, "pages": "354 + 355", "from": "النور (32)", "to": "النور (43)", "juz": "18", "done": false, "surahNum": 24, "surahName": "النور"}, {"day": 26, "weekday": "الثلاثاء", "greg": "2026-11-10", "hijri": "30 جمادى الأولى 1448", "weight": 2.0, "pages": "356 + 357", "from": "النور (44)", "to": "النور (58)", "juz": "18", "done": false, "surahNum": 24, "surahName": "النور"}, {"day": 27, "weekday": "الأربعاء", "greg": "2026-11-11", "hijri": "1 جمادى الآخرة 1448", "weight": 2.0, "pages": "358 + 359", "from": "النور (59)", "to": "الفرقان (2)", "juz": "18", "done": false, "surahNum": 24, "surahName": "النور"}, {"day": 28, "weekday": "الخميس", "greg": "2026-11-12", "hijri": "2 جمادى الآخرة 1448", "weight": 2.0, "pages": "342 + 343", "from": "المؤمنون (1)", "to": "المؤمنون (27)", "juz": "18", "done": false, "surahNum": 23, "surahName": "المؤمنون"}, {"day": 29, "weekday": "الجمعة", "greg": "2026-11-13", "hijri": "3 جمادى الآخرة 1448", "weight": 2.0, "pages": "344 + 345", "from": "المؤمنون (28)", "to": "المؤمنون (59)", "juz": "18", "done": false, "surahNum": 23, "surahName": "المؤمنون"}, {"day": 30, "weekday": "السبت", "greg": "2026-11-14", "hijri": "4 جمادى الآخرة 1448", "weight": 2.0, "pages": "346 + 347", "from": "المؤمنون (60)", "to": "المؤمنون (89)", "juz": "18", "done": false, "surahNum": 23, "surahName": "المؤمنون"}, {"day": 31, "weekday": "الأحد", "greg": "2026-11-15", "hijri": "5 جمادى الآخرة 1448", "weight": 2.0, "pages": "348 + 349", "from": "المؤمنون (90)", "to": "المؤمنون (118)", "juz": "18", "done": false, "surahNum": 23, "surahName": "المؤمنون"}, {"day": 32, "weekday": "الإثنين", "greg": "2026-11-16", "hijri": "6 جمادى الآخرة 1448", "weight": 2.0, "pages": "332 + 333", "from": "الحج (1)", "to": "الحج (15)", "juz": "17", "done": false, "surahNum": 22, "surahName": "الحج"}, {"day": 33, "weekday": "الثلاثاء", "greg": "2026-11-17", "hijri": "7 جمادى الآخرة 1448", "weight": 2.0, "pages": "334 + 335", "from": "الحج (16)", "to": "الحج (30)", "juz": "17", "done": false, "surahNum": 22, "surahName": "الحج"}, {"day": 34, "weekday": "الأربعاء", "greg": "2026-11-18", "hijri": "8 جمادى الآخرة 1448", "weight": 2.0, "pages": "336 + 337", "from": "الحج (31)", "to": "الحج (46)", "juz": "17", "done": false, "surahNum": 22, "surahName": "الحج"}, {"day": 35, "weekday": "الخميس", "greg": "2026-11-19", "hijri": "9 جمادى الآخرة 1448", "weight": 2.0, "pages": "338 + 339", "from": "الحج (47)", "to": "الحج (64)", "juz": "17", "done": false, "surahNum": 22, "surahName": "الحج"}, {"day": 36, "weekday": "الجمعة", "greg": "2026-11-20", "hijri": "10 جمادى الآخرة 1448", "weight": 2.0, "pages": "340 + 341", "from": "الحج (65)", "to": "الحج (78)", "juz": "17", "done": false, "surahNum": 22, "surahName": "الحج"}, {"day": 37, "weekday": "السبت", "greg": "2026-11-21", "hijri": "11 جمادى الآخرة 1448", "weight": 2.0, "pages": "322 + 323", "from": "الأنبياء (1)", "to": "الأنبياء (24)", "juz": "17", "done": false, "surahNum": 21, "surahName": "الأنبياء"}, {"day": 38, "weekday": "الأحد", "greg": "2026-11-22", "hijri": "12 جمادى الآخرة 1448", "weight": 2.0, "pages": "324 + 325", "from": "الأنبياء (25)", "to": "الأنبياء (44)", "juz": "17", "done": false, "surahNum": 21, "surahName": "الأنبياء"}, {"day": 39, "weekday": "الإثنين", "greg": "2026-11-23", "hijri": "13 جمادى الآخرة 1448", "weight": 2.0, "pages": "326 + 327", "from": "الأنبياء (45)", "to": "الأنبياء (72)", "juz": "17", "done": false, "surahNum": 21, "surahName": "الأنبياء"}, {"day": 40, "weekday": "الثلاثاء", "greg": "2026-11-24", "hijri": "14 جمادى الآخرة 1448", "weight": 2.0, "pages": "328 + 329", "from": "الأنبياء (73)", "to": "الأنبياء (90)", "juz": "17", "done": false, "surahNum": 21, "surahName": "الأنبياء"}, {"day": 41, "weekday": "الأربعاء", "greg": "2026-11-25", "hijri": "15 جمادى الآخرة 1448", "weight": 2.0, "pages": "330 + 331", "from": "الأنبياء (91)", "to": "الأنبياء (112)", "juz": "17", "done": false, "surahNum": 21, "surahName": "الأنبياء"}, {"day": 42, "weekday": "الخميس", "greg": "2026-11-26", "hijri": "16 جمادى الآخرة 1448", "weight": 2.0, "pages": "312 + 313", "from": "مريم (96)", "to": "طه (37)", "juz": "16", "done": false, "surahNum": 20, "surahName": "طه"}, {"day": 43, "weekday": "الجمعة", "greg": "2026-11-27", "hijri": "17 جمادى الآخرة 1448", "weight": 2.0, "pages": "314 + 315", "from": "طه (38)", "to": "طه (64)", "juz": "16", "done": false, "surahNum": 20, "surahName": "طه"}, {"day": 44, "weekday": "السبت", "greg": "2026-11-28", "hijri": "18 جمادى الآخرة 1448", "weight": 2.0, "pages": "316 + 317", "from": "طه (65)", "to": "طه (87)", "juz": "16", "done": false, "surahNum": 20, "surahName": "طه"}, {"day": 45, "weekday": "الأحد", "greg": "2026-11-29", "hijri": "19 جمادى الآخرة 1448", "weight": 2.0, "pages": "318 + 319", "from": "طه (88)", "to": "طه (113)", "juz": "16", "done": false, "surahNum": 20, "surahName": "طه"}, {"day": 46, "weekday": "الإثنين", "greg": "2026-11-30", "hijri": "20 جمادى الآخرة 1448", "weight": 2.0, "pages": "320 + 321", "from": "طه (114)", "to": "طه (135)", "juz": "16", "done": false, "surahNum": 20, "surahName": "طه"}, {"day": 47, "weekday": "الثلاثاء", "greg": "2026-12-01", "hijri": "21 جمادى الآخرة 1448", "weight": 2.0, "pages": "305 + 306", "from": "مريم (1)", "to": "مريم (25)", "juz": "16", "done": false, "surahNum": 19, "surahName": "مريم"}, {"day": 48, "weekday": "الأربعاء", "greg": "2026-12-02", "hijri": "22 جمادى الآخرة 1448", "weight": 2.0, "pages": "307 + 308", "from": "مريم (26)", "to": "مريم (51)", "juz": "16", "done": false, "surahNum": 19, "surahName": "مريم"}, {"day": 49, "weekday": "الخميس", "greg": "2026-12-03", "hijri": "23 جمادى الآخرة 1448", "weight": 2.0, "pages": "309 + 310", "from": "مريم (52)", "to": "مريم (76)", "juz": "16", "done": false, "surahNum": 19, "surahName": "مريم"}, {"day": 50, "weekday": "الجمعة", "greg": "2026-12-04", "hijri": "24 جمادى الآخرة 1448", "weight": 2.0, "pages": "311 + نص 312 + نص 293", "from": "مريم (77)", "to": "الكهف (4)", "juz": "16-15", "done": false, "surahNum": 19, "surahName": "مريم"}, {"day": 51, "weekday": "السبت", "greg": "2026-12-05", "hijri": "25 جمادى الآخرة 1448", "weight": 2.0, "pages": "294 + 295", "from": "الكهف (5)", "to": "الكهف (20)", "juz": "15", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 52, "weekday": "الأحد", "greg": "2026-12-06", "hijri": "26 جمادى الآخرة 1448", "weight": 2.0, "pages": "296 + 297", "from": "الكهف (21)", "to": "الكهف (34)", "juz": "15", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 53, "weekday": "الإثنين", "greg": "2026-12-07", "hijri": "27 جمادى الآخرة 1448", "weight": 2.0, "pages": "298 + 299", "from": "الكهف (35)", "to": "الكهف (53)", "juz": "15", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 54, "weekday": "الثلاثاء", "greg": "2026-12-08", "hijri": "28 جمادى الآخرة 1448", "weight": 2.0, "pages": "300 + 301", "from": "الكهف (54)", "to": "الكهف (74)", "juz": "15", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 55, "weekday": "الأربعاء", "greg": "2026-12-09", "hijri": "29 جمادى الآخرة 1448", "weight": 2.0, "pages": "302 + 303", "from": "الكهف (75)", "to": "الكهف (97)", "juz": "16", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 56, "weekday": "الخميس", "greg": "2026-12-10", "hijri": "1 رجب 1448", "weight": 2.0, "pages": "304 + 282", "from": "الكهف (98)", "to": "الإسراء (7)", "juz": "16-15", "done": false, "surahNum": 18, "surahName": "الكهف"}, {"day": 57, "weekday": "الجمعة", "greg": "2026-12-11", "hijri": "2 رجب 1448", "weight": 2.0, "pages": "283 + 284", "from": "الإسراء (8)", "to": "الإسراء (27)", "juz": "15", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 58, "weekday": "السبت", "greg": "2026-12-12", "hijri": "3 رجب 1448", "weight": 2.0, "pages": "285 + 286", "from": "الإسراء (28)", "to": "الإسراء (49)", "juz": "15", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 59, "weekday": "الأحد", "greg": "2026-12-13", "hijri": "4 رجب 1448", "weight": 2.0, "pages": "287 + 288", "from": "الإسراء (50)", "to": "الإسراء (66)", "juz": "15", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 60, "weekday": "الإثنين", "greg": "2026-12-14", "hijri": "5 رجب 1448", "weight": 2.0, "pages": "289 + 290", "from": "الإسراء (67)", "to": "الإسراء (86)", "juz": "15", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 61, "weekday": "الثلاثاء", "greg": "2026-12-15", "hijri": "6 رجب 1448", "weight": 2.0, "pages": "291 + 292", "from": "الإسراء (87)", "to": "الإسراء (104)", "juz": "15", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 62, "weekday": "الأربعاء", "greg": "2026-12-16", "hijri": "7 رجب 1448", "weight": 2.5, "pages": "293 + نص 267 + 268", "from": "الإسراء (105)", "to": "النحل (14)", "juz": "15-14", "done": false, "surahNum": 17, "surahName": "الإسراء"}, {"day": 63, "weekday": "الخميس", "greg": "2026-12-17", "hijri": "8 رجب 1448", "weight": 2.0, "pages": "269 + 270", "from": "النحل (15)", "to": "النحل (34)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 64, "weekday": "الجمعة", "greg": "2026-12-18", "hijri": "9 رجب 1448", "weight": 2.0, "pages": "271 + 272", "from": "النحل (35)", "to": "النحل (54)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 65, "weekday": "السبت", "greg": "2026-12-19", "hijri": "10 رجب 1448", "weight": 2.0, "pages": "273 + 274", "from": "النحل (55)", "to": "النحل (72)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 66, "weekday": "الأحد", "greg": "2026-12-20", "hijri": "11 رجب 1448", "weight": 2.0, "pages": "275 + 276", "from": "النحل (73)", "to": "النحل (87)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 67, "weekday": "الإثنين", "greg": "2026-12-21", "hijri": "12 رجب 1448", "weight": 2.0, "pages": "277 + 278", "from": "النحل (88)", "to": "النحل (102)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 68, "weekday": "الثلاثاء", "greg": "2026-12-22", "hijri": "13 رجب 1448", "weight": 2.0, "pages": "279 + 280", "from": "النحل (103)", "to": "النحل (118)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 69, "weekday": "الأربعاء", "greg": "2026-12-23", "hijri": "14 رجب 1448", "weight": 2.0, "pages": "281 + 262", "from": "النحل (119)", "to": "الحجر (15)", "juz": "14", "done": false, "surahNum": 16, "surahName": "النحل"}, {"day": 70, "weekday": "الخميس", "greg": "2026-12-24", "hijri": "15 رجب 1448", "weight": 2.0, "pages": "263 + 264", "from": "الحجر (16)", "to": "الحجر (51)", "juz": "14", "done": false, "surahNum": 15, "surahName": "الحجر"}, {"day": 71, "weekday": "الجمعة", "greg": "2026-12-25", "hijri": "16 رجب 1448", "weight": 2.5, "pages": "265 + 266 + نص 267", "from": "الحجر (52)", "to": "النحل (6)", "juz": "14", "done": false, "surahNum": 15, "surahName": "الحجر"}, {"day": 72, "weekday": "السبت", "greg": "2026-12-26", "hijri": "17 رجب 1448", "weight": 2.0, "pages": "255 + 256", "from": "الرعد (43)", "to": "إبراهيم (10)", "juz": "13", "done": false, "surahNum": 14, "surahName": "إبراهيم"}, {"day": 73, "weekday": "الأحد", "greg": "2026-12-27", "hijri": "18 رجب 1448", "weight": 2.0, "pages": "257 + 258", "from": "إبراهيم (11)", "to": "إبراهيم (24)", "juz": "13", "done": false, "surahNum": 14, "surahName": "إبراهيم"}, {"day": 74, "weekday": "الإثنين", "greg": "2026-12-28", "hijri": "19 رجب 1448", "weight": 2.0, "pages": "259 + 260", "from": "إبراهيم (25)", "to": "إبراهيم (42)", "juz": "13", "done": false, "surahNum": 14, "surahName": "إبراهيم"}, {"day": 75, "weekday": "الثلاثاء", "greg": "2026-12-29", "hijri": "20 رجب 1448", "weight": 2.0, "pages": "261 + 249", "from": "إبراهيم (43)", "to": "الرعد (5)", "juz": "13", "done": false, "surahNum": 14, "surahName": "إبراهيم"}, {"day": 76, "weekday": "الأربعاء", "greg": "2026-12-30", "hijri": "21 رجب 1448", "weight": 2.0, "pages": "250 + 251", "from": "الرعد (6)", "to": "الرعد (18)", "juz": "13", "done": false, "surahNum": 13, "surahName": "الرعد"}, {"day": 77, "weekday": "الخميس", "greg": "2026-12-31", "hijri": "22 رجب 1448", "weight": 2.0, "pages": "252 + 253", "from": "الرعد (19)", "to": "الرعد (34)", "juz": "13", "done": false, "surahNum": 13, "surahName": "الرعد"}, {"day": 78, "weekday": "الجمعة", "greg": "2027-01-01", "hijri": "23 رجب 1448", "weight": 2.0, "pages": "254 + نص 255 + نص 235", "from": "الرعد (35)", "to": "يوسف (4)", "juz": "13-12", "done": false, "surahNum": 13, "surahName": "الرعد"}, {"day": 79, "weekday": "السبت", "greg": "2027-01-02", "hijri": "24 رجب 1448", "weight": 2.0, "pages": "236 + 237", "from": "يوسف (5)", "to": "يوسف (22)", "juz": "12", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 80, "weekday": "الأحد", "greg": "2027-01-03", "hijri": "25 رجب 1448", "weight": 2.0, "pages": "238 + 239", "from": "يوسف (23)", "to": "يوسف (37)", "juz": "12", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 81, "weekday": "الإثنين", "greg": "2027-01-04", "hijri": "26 رجب 1448", "weight": 2.0, "pages": "240 + 241", "from": "يوسف (38)", "to": "يوسف (52)", "juz": "12", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 82, "weekday": "الثلاثاء", "greg": "2027-01-05", "hijri": "27 رجب 1448", "weight": 2.0, "pages": "242 + 243", "from": "يوسف (53)", "to": "يوسف (69)", "juz": "13", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 83, "weekday": "الأربعاء", "greg": "2027-01-06", "hijri": "28 رجب 1448", "weight": 2.0, "pages": "244 + 245", "from": "يوسف (70)", "to": "يوسف (86)", "juz": "13", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 84, "weekday": "الخميس", "greg": "2027-01-07", "hijri": "29 رجب 1448", "weight": 2.0, "pages": "246 + 247", "from": "يوسف (87)", "to": "يوسف (103)", "juz": "13", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 85, "weekday": "الجمعة", "greg": "2027-01-08", "hijri": "30 رجب 1448", "weight": 2.5, "pages": "248 + نص 221 + 222", "from": "يوسف (104)", "to": "هود (12)", "juz": "13-12", "done": false, "surahNum": 12, "surahName": "يوسف"}, {"day": 86, "weekday": "السبت", "greg": "2027-01-09", "hijri": "1 شعبان 1448", "weight": 2.0, "pages": "223 + 224", "from": "هود (13)", "to": "هود (28)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 87, "weekday": "الأحد", "greg": "2027-01-10", "hijri": "2 شعبان 1448", "weight": 2.0, "pages": "225 + 226", "from": "هود (29)", "to": "هود (45)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 88, "weekday": "الإثنين", "greg": "2027-01-11", "hijri": "3 شعبان 1448", "weight": 2.0, "pages": "227 + 228", "from": "هود (46)", "to": "هود (62)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 89, "weekday": "الثلاثاء", "greg": "2027-01-12", "hijri": "4 شعبان 1448", "weight": 2.0, "pages": "229 + 230", "from": "هود (63)", "to": "هود (81)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 90, "weekday": "الأربعاء", "greg": "2027-01-13", "hijri": "5 شعبان 1448", "weight": 2.0, "pages": "231 + 232", "from": "هود (82)", "to": "هود (97)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 91, "weekday": "الخميس", "greg": "2027-01-14", "hijri": "6 شعبان 1448", "weight": 2.5, "pages": "233 + 234 + نص 235", "from": "هود (98)", "to": "يوسف (4)", "juz": "12", "done": false, "surahNum": 11, "surahName": "هود"}, {"day": 92, "weekday": "الجمعة", "greg": "2027-01-15", "hijri": "7 شعبان 1448", "weight": 2.0, "pages": "208 + 209", "from": "يونس (1)", "to": "يونس (14)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 93, "weekday": "السبت", "greg": "2027-01-16", "hijri": "8 شعبان 1448", "weight": 2.0, "pages": "210 + 211", "from": "يونس (15)", "to": "يونس (25)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 94, "weekday": "الأحد", "greg": "2027-01-17", "hijri": "9 شعبان 1448", "weight": 2.0, "pages": "212 + 213", "from": "يونس (26)", "to": "يونس (42)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 95, "weekday": "الإثنين", "greg": "2027-01-18", "hijri": "10 شعبان 1448", "weight": 2.0, "pages": "214 + 215", "from": "يونس (43)", "to": "يونس (61)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 96, "weekday": "الثلاثاء", "greg": "2027-01-19", "hijri": "11 شعبان 1448", "weight": 2.0, "pages": "216 + 217", "from": "يونس (62)", "to": "يونس (78)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 97, "weekday": "الأربعاء", "greg": "2027-01-20", "hijri": "12 شعبان 1448", "weight": 2.0, "pages": "218 + 219", "from": "يونس (79)", "to": "يونس (97)", "juz": "11", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 98, "weekday": "الخميس", "greg": "2027-01-21", "hijri": "13 شعبان 1448", "weight": 2.5, "pages": "220 + نص 221 + 187", "from": "يونس (98)", "to": "التوبة (6)", "juz": "11-10", "done": false, "surahNum": 10, "surahName": "يونس"}, {"day": 99, "weekday": "الجمعة", "greg": "2027-01-22", "hijri": "14 شعبان 1448", "weight": 2.0, "pages": "188 + 189", "from": "التوبة (7)", "to": "التوبة (20)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 100, "weekday": "السبت", "greg": "2027-01-23", "hijri": "15 شعبان 1448", "weight": 2.0, "pages": "190 + 191", "from": "التوبة (21)", "to": "التوبة (31)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 101, "weekday": "الأحد", "greg": "2027-01-24", "hijri": "16 شعبان 1448", "weight": 2.0, "pages": "192 + 193", "from": "التوبة (32)", "to": "التوبة (40)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 102, "weekday": "الإثنين", "greg": "2027-01-25", "hijri": "17 شعبان 1448", "weight": 2.0, "pages": "194 + 195", "from": "التوبة (41)", "to": "التوبة (54)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 103, "weekday": "الثلاثاء", "greg": "2027-01-26", "hijri": "18 شعبان 1448", "weight": 2.0, "pages": "196 + 197", "from": "التوبة (55)", "to": "التوبة (68)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 104, "weekday": "الأربعاء", "greg": "2027-01-27", "hijri": "19 شعبان 1448", "weight": 2.0, "pages": "198 + 199", "from": "التوبة (69)", "to": "التوبة (79)", "juz": "10", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 105, "weekday": "الخميس", "greg": "2027-01-28", "hijri": "20 شعبان 1448", "weight": 2.0, "pages": "200 + 201", "from": "التوبة (80)", "to": "التوبة (93)", "juz": "10-11", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 106, "weekday": "الجمعة", "greg": "2027-01-29", "hijri": "21 شعبان 1448", "weight": 2.0, "pages": "202 + 203", "from": "التوبة (94)", "to": "التوبة (106)", "juz": "11", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 107, "weekday": "السبت", "greg": "2027-01-30", "hijri": "22 شعبان 1448", "weight": 2.0, "pages": "204 + 205", "from": "التوبة (107)", "to": "التوبة (117)", "juz": "11", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 108, "weekday": "الأحد", "greg": "2027-01-31", "hijri": "23 شعبان 1448", "weight": 2.0, "pages": "206 + 207", "from": "التوبة (118)", "to": "التوبة (129)", "juz": "11", "done": false, "surahNum": 9, "surahName": "التوبة"}, {"day": 109, "weekday": "الإثنين", "greg": "2027-02-01", "hijri": "24 شعبان 1448", "weight": 2.0, "pages": "177 + 178", "from": "الأنفال (1)", "to": "الأنفال (16)", "juz": "9", "done": false, "surahNum": 8, "surahName": "الأنفال"}, {"day": 110, "weekday": "الثلاثاء", "greg": "2027-02-02", "hijri": "25 شعبان 1448", "weight": 2.0, "pages": "179 + 180", "from": "الأنفال (17)", "to": "الأنفال (33)", "juz": "9", "done": false, "surahNum": 8, "surahName": "الأنفال"}, {"day": 111, "weekday": "الأربعاء", "greg": "2027-02-03", "hijri": "26 شعبان 1448", "weight": 2.0, "pages": "181 + 182", "from": "الأنفال (34)", "to": "الأنفال (45)", "juz": "9-10", "done": false, "surahNum": 8, "surahName": "الأنفال"}, {"day": 112, "weekday": "الخميس", "greg": "2027-02-04", "hijri": "27 شعبان 1448", "weight": 2.0, "pages": "183 + 184", "from": "الأنفال (46)", "to": "الأنفال (61)", "juz": "10", "done": false, "surahNum": 8, "surahName": "الأنفال"}, {"day": 113, "weekday": "الجمعة", "greg": "2027-02-05", "hijri": "28 شعبان 1448", "weight": 2.0, "pages": "185 + 186", "from": "الأنفال (62)", "to": "الأنفال (75)", "juz": "10", "done": false, "surahNum": 8, "surahName": "الأنفال"}, {"day": 114, "weekday": "السبت", "greg": "2027-02-06", "hijri": "29 شعبان 1448", "weight": 2.0, "pages": "151 + 152", "from": "الأعراف (1)", "to": "الأعراف (22)", "juz": "8", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 115, "weekday": "الأحد", "greg": "2027-02-07", "hijri": "30 شعبان 1448", "weight": 2.0, "pages": "153 + 154", "from": "الأعراف (23)", "to": "الأعراف (37)", "juz": "8", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 116, "weekday": "الإثنين", "greg": "2027-02-08", "hijri": "1 رمضان 1448", "weight": 2.0, "pages": "155 + 156", "from": "الأعراف (38)", "to": "الأعراف (51)", "juz": "8", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 117, "weekday": "الثلاثاء", "greg": "2027-02-09", "hijri": "2 رمضان 1448", "weight": 2.0, "pages": "157 + 158", "from": "الأعراف (52)", "to": "الأعراف (67)", "juz": "8", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 118, "weekday": "الأربعاء", "greg": "2027-02-10", "hijri": "3 رمضان 1448", "weight": 2.0, "pages": "159 + 160", "from": "الأعراف (68)", "to": "الأعراف (81)", "juz": "8", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 119, "weekday": "الخميس", "greg": "2027-02-11", "hijri": "4 رمضان 1448", "weight": 2.0, "pages": "161 + 162", "from": "الأعراف (82)", "to": "الأعراف (95)", "juz": "8-9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 120, "weekday": "الجمعة", "greg": "2027-02-12", "hijri": "5 رمضان 1448", "weight": 2.0, "pages": "163 + 164", "from": "الأعراف (96)", "to": "الأعراف (120)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 121, "weekday": "السبت", "greg": "2027-02-13", "hijri": "6 رمضان 1448", "weight": 2.0, "pages": "165 + 166", "from": "الأعراف (121)", "to": "الأعراف (137)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 122, "weekday": "الأحد", "greg": "2027-02-14", "hijri": "7 رمضان 1448", "weight": 2.0, "pages": "167 + 168", "from": "الأعراف (138)", "to": "الأعراف (149)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 123, "weekday": "الإثنين", "greg": "2027-02-15", "hijri": "8 رمضان 1448", "weight": 2.0, "pages": "169 + 170", "from": "الأعراف (150)", "to": "الأعراف (159)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 124, "weekday": "الثلاثاء", "greg": "2027-02-16", "hijri": "9 رمضان 1448", "weight": 2.0, "pages": "171 + 172", "from": "الأعراف (160)", "to": "الأعراف (170)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 125, "weekday": "الأربعاء", "greg": "2027-02-17", "hijri": "10 رمضان 1448", "weight": 2.0, "pages": "173 + 174", "from": "الأعراف (171)", "to": "الأعراف (187)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 126, "weekday": "الخميس", "greg": "2027-02-18", "hijri": "11 رمضان 1448", "weight": 2.0, "pages": "175 + 176", "from": "الأعراف (188)", "to": "الأعراف (206)", "juz": "9", "done": false, "surahNum": 7, "surahName": "الأعراف"}, {"day": 127, "weekday": "الجمعة", "greg": "2027-02-19", "hijri": "12 رمضان 1448", "weight": 2.0, "pages": "128 + 129", "from": "الأنعام (1)", "to": "الأنعام (18)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 128, "weekday": "السبت", "greg": "2027-02-20", "hijri": "13 رمضان 1448", "weight": 2.0, "pages": "130 + 131", "from": "الأنعام (19)", "to": "الأنعام (35)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 129, "weekday": "الأحد", "greg": "2027-02-21", "hijri": "14 رمضان 1448", "weight": 2.0, "pages": "132 + 133", "from": "الأنعام (36)", "to": "الأنعام (52)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 130, "weekday": "الإثنين", "greg": "2027-02-22", "hijri": "15 رمضان 1448", "weight": 2.0, "pages": "134 + 135", "from": "الأنعام (53)", "to": "الأنعام (68)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 131, "weekday": "الثلاثاء", "greg": "2027-02-23", "hijri": "16 رمضان 1448", "weight": 2.0, "pages": "136 + 137", "from": "الأنعام (69)", "to": "الأنعام (81)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 132, "weekday": "الأربعاء", "greg": "2027-02-24", "hijri": "17 رمضان 1448", "weight": 2.0, "pages": "138 + 139", "from": "الأنعام (82)", "to": "الأنعام (94)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 133, "weekday": "الخميس", "greg": "2027-02-25", "hijri": "18 رمضان 1448", "weight": 2.0, "pages": "140 + 141", "from": "الأنعام (95)", "to": "الأنعام (110)", "juz": "7", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 134, "weekday": "الجمعة", "greg": "2027-02-26", "hijri": "19 رمضان 1448", "weight": 2.0, "pages": "142 + 143", "from": "الأنعام (111)", "to": "الأنعام (124)", "juz": "8", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 135, "weekday": "السبت", "greg": "2027-02-27", "hijri": "20 رمضان 1448", "weight": 2.0, "pages": "144 + 145", "from": "الأنعام (125)", "to": "الأنعام (137)", "juz": "8", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 136, "weekday": "الأحد", "greg": "2027-02-28", "hijri": "21 رمضان 1448", "weight": 2.0, "pages": "146 + 147", "from": "الأنعام (138)", "to": "الأنعام (146)", "juz": "8", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 137, "weekday": "الإثنين", "greg": "2027-03-01", "hijri": "22 رمضان 1448", "weight": 2.0, "pages": "148 + 149", "from": "الأنعام (147)", "to": "الأنعام (157)", "juz": "8", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 138, "weekday": "الثلاثاء", "greg": "2027-03-02", "hijri": "23 رمضان 1448", "weight": 2.5, "pages": "150 + نص 106 + 107", "from": "الأنعام (158)", "to": "المائدة (5)", "juz": "8-6", "done": false, "surahNum": 6, "surahName": "الأنعام"}, {"day": 139, "weekday": "الأربعاء", "greg": "2027-03-03", "hijri": "24 رمضان 1448", "weight": 2.0, "pages": "108 + 109", "from": "المائدة (6)", "to": "المائدة (13)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 140, "weekday": "الخميس", "greg": "2027-03-04", "hijri": "25 رمضان 1448", "weight": 2.0, "pages": "110 + 111", "from": "المائدة (14)", "to": "المائدة (23)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 141, "weekday": "الجمعة", "greg": "2027-03-05", "hijri": "26 رمضان 1448", "weight": 2.0, "pages": "112 + 113", "from": "المائدة (24)", "to": "المائدة (36)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 142, "weekday": "السبت", "greg": "2027-03-06", "hijri": "27 رمضان 1448", "weight": 2.0, "pages": "114 + 115", "from": "المائدة (37)", "to": "المائدة (45)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 143, "weekday": "الأحد", "greg": "2027-03-07", "hijri": "28 رمضان 1448", "weight": 2.0, "pages": "116 + 117", "from": "المائدة (46)", "to": "المائدة (57)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 144, "weekday": "الإثنين", "greg": "2027-03-08", "hijri": "29 رمضان 1448", "weight": 2.0, "pages": "118 + 119", "from": "المائدة (58)", "to": "المائدة (70)", "juz": "6", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 145, "weekday": "الثلاثاء", "greg": "2027-03-09", "hijri": "1 شوال 1448", "weight": 2.0, "pages": "120 + 121", "from": "المائدة (71)", "to": "المائدة (82)", "juz": "6-7", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 146, "weekday": "الأربعاء", "greg": "2027-03-10", "hijri": "2 شوال 1448", "weight": 2.0, "pages": "122 + 123", "from": "المائدة (83)", "to": "المائدة (95)", "juz": "7", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 147, "weekday": "الخميس", "greg": "2027-03-11", "hijri": "3 شوال 1448", "weight": 2.0, "pages": "124 + 125", "from": "المائدة (96)", "to": "المائدة (108)", "juz": "7", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 148, "weekday": "الجمعة", "greg": "2027-03-12", "hijri": "4 شوال 1448", "weight": 2.0, "pages": "126 + 127", "from": "المائدة (109)", "to": "المائدة (120)", "juz": "7", "done": false, "surahNum": 5, "surahName": "المائدة"}, {"day": 149, "weekday": "السبت", "greg": "2027-03-13", "hijri": "5 شوال 1448", "weight": 2.0, "pages": "77 + 78", "from": "النساء (1)", "to": "النساء (11)", "juz": "4", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 150, "weekday": "الأحد", "greg": "2027-03-14", "hijri": "6 شوال 1448", "weight": 2.0, "pages": "79 + 80", "from": "النساء (12)", "to": "النساء (19)", "juz": "4", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 151, "weekday": "الإثنين", "greg": "2027-03-15", "hijri": "7 شوال 1448", "weight": 2.0, "pages": "81 + 82", "from": "النساء (20)", "to": "النساء (26)", "juz": "4-5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 152, "weekday": "الثلاثاء", "greg": "2027-03-16", "hijri": "8 شوال 1448", "weight": 2.0, "pages": "83 + 84", "from": "النساء (27)", "to": "النساء (37)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 153, "weekday": "الأربعاء", "greg": "2027-03-17", "hijri": "9 شوال 1448", "weight": 2.0, "pages": "85 + 86", "from": "النساء (38)", "to": "النساء (51)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 154, "weekday": "الخميس", "greg": "2027-03-18", "hijri": "10 شوال 1448", "weight": 2.0, "pages": "87 + 88", "from": "النساء (52)", "to": "النساء (65)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 155, "weekday": "الجمعة", "greg": "2027-03-19", "hijri": "11 شوال 1448", "weight": 2.0, "pages": "89 + 90", "from": "النساء (66)", "to": "النساء (79)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 156, "weekday": "السبت", "greg": "2027-03-20", "hijri": "12 شوال 1448", "weight": 2.0, "pages": "91 + 92", "from": "النساء (80)", "to": "النساء (91)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 157, "weekday": "الأحد", "greg": "2027-03-21", "hijri": "13 شوال 1448", "weight": 2.0, "pages": "93 + 94", "from": "النساء (92)", "to": "النساء (101)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 158, "weekday": "الإثنين", "greg": "2027-03-22", "hijri": "14 شوال 1448", "weight": 2.0, "pages": "95 + 96", "from": "النساء (102)", "to": "النساء (113)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 159, "weekday": "الثلاثاء", "greg": "2027-03-23", "hijri": "15 شوال 1448", "weight": 2.0, "pages": "97 + 98", "from": "النساء (114)", "to": "النساء (127)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 160, "weekday": "الأربعاء", "greg": "2027-03-24", "hijri": "16 شوال 1448", "weight": 2.0, "pages": "99 + 100", "from": "النساء (128)", "to": "النساء (140)", "juz": "5", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 161, "weekday": "الخميس", "greg": "2027-03-25", "hijri": "17 شوال 1448", "weight": 2.0, "pages": "101 + 102", "from": "النساء (141)", "to": "النساء (154)", "juz": "5-6", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 162, "weekday": "الجمعة", "greg": "2027-03-26", "hijri": "18 شوال 1448", "weight": 2.0, "pages": "103 + 104", "from": "النساء (155)", "to": "النساء (170)", "juz": "6", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 163, "weekday": "السبت", "greg": "2027-03-27", "hijri": "19 شوال 1448", "weight": 2.5, "pages": "105 + نص 106 + 50", "from": "النساء (171)", "to": "آل عمران (9)", "juz": "6-3", "done": false, "surahNum": 4, "surahName": "النساء"}, {"day": 164, "weekday": "الأحد", "greg": "2027-03-28", "hijri": "20 شوال 1448", "weight": 2.0, "pages": "51 + 52", "from": "آل عمران (10)", "to": "آل عمران (22)", "juz": "3", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 165, "weekday": "الإثنين", "greg": "2027-03-29", "hijri": "21 شوال 1448", "weight": 2.0, "pages": "53 + 54", "from": "آل عمران (23)", "to": "آل عمران (37)", "juz": "3", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 166, "weekday": "الثلاثاء", "greg": "2027-03-30", "hijri": "22 شوال 1448", "weight": 2.0, "pages": "55 + 56", "from": "آل عمران (38)", "to": "آل عمران (52)", "juz": "3", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 167, "weekday": "الأربعاء", "greg": "2027-03-31", "hijri": "23 شوال 1448", "weight": 2.0, "pages": "57 + 58", "from": "آل عمران (53)", "to": "آل عمران (70)", "juz": "3", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 168, "weekday": "الخميس", "greg": "2027-04-01", "hijri": "24 شوال 1448", "weight": 2.0, "pages": "59 + 60", "from": "آل عمران (71)", "to": "آل عمران (83)", "juz": "3", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 169, "weekday": "الجمعة", "greg": "2027-04-02", "hijri": "25 شوال 1448", "weight": 2.0, "pages": "61 + 62", "from": "آل عمران (84)", "to": "آل عمران (100)", "juz": "3-4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 170, "weekday": "السبت", "greg": "2027-04-03", "hijri": "26 شوال 1448", "weight": 2.0, "pages": "63 + 64", "from": "آل عمران (101)", "to": "آل عمران (115)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 171, "weekday": "الأحد", "greg": "2027-04-04", "hijri": "27 شوال 1448", "weight": 2.0, "pages": "65 + 66", "from": "آل عمران (116)", "to": "آل عمران (132)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 172, "weekday": "الإثنين", "greg": "2027-04-05", "hijri": "28 شوال 1448", "weight": 2.0, "pages": "67 + 68", "from": "آل عمران (133)", "to": "آل عمران (148)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 173, "weekday": "الثلاثاء", "greg": "2027-04-06", "hijri": "29 شوال 1448", "weight": 2.0, "pages": "69 + 70", "from": "آل عمران (149)", "to": "آل عمران (157)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 174, "weekday": "الأربعاء", "greg": "2027-04-07", "hijri": "30 شوال 1448", "weight": 2.0, "pages": "71 + 72", "from": "آل عمران (158)", "to": "آل عمران (173)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 175, "weekday": "الخميس", "greg": "2027-04-08", "hijri": "1 ذو القعدة 1448", "weight": 2.0, "pages": "73 + 74", "from": "آل عمران (174)", "to": "آل عمران (186)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 176, "weekday": "الجمعة", "greg": "2027-04-09", "hijri": "2 ذو القعدة 1448", "weight": 2.0, "pages": "75 + 76", "from": "آل عمران (187)", "to": "آل عمران (200)", "juz": "4", "done": false, "surahNum": 3, "surahName": "آل عمران"}, {"day": 177, "weekday": "السبت", "greg": "2027-04-10", "hijri": "3 ذو القعدة 1448", "weight": 2.0, "pages": "2 + 3", "from": "البقرة (1)", "to": "البقرة (16)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 178, "weekday": "الأحد", "greg": "2027-04-11", "hijri": "4 ذو القعدة 1448", "weight": 2.0, "pages": "4 + 5", "from": "البقرة (17)", "to": "البقرة (29)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 179, "weekday": "الإثنين", "greg": "2027-04-12", "hijri": "5 ذو القعدة 1448", "weight": 2.0, "pages": "6 + 7", "from": "البقرة (30)", "to": "البقرة (48)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 180, "weekday": "الثلاثاء", "greg": "2027-04-13", "hijri": "6 ذو القعدة 1448", "weight": 2.0, "pages": "8 + 9", "from": "البقرة (49)", "to": "البقرة (61)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 181, "weekday": "الأربعاء", "greg": "2027-04-14", "hijri": "7 ذو القعدة 1448", "weight": 2.0, "pages": "10 + 11", "from": "البقرة (62)", "to": "البقرة (76)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 182, "weekday": "الخميس", "greg": "2027-04-15", "hijri": "8 ذو القعدة 1448", "weight": 2.0, "pages": "12 + 13", "from": "البقرة (77)", "to": "البقرة (88)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 183, "weekday": "الجمعة", "greg": "2027-04-16", "hijri": "9 ذو القعدة 1448", "weight": 2.0, "pages": "14 + 15", "from": "البقرة (89)", "to": "البقرة (101)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 184, "weekday": "السبت", "greg": "2027-04-17", "hijri": "10 ذو القعدة 1448", "weight": 2.0, "pages": "16 + 17", "from": "البقرة (102)", "to": "البقرة (112)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 185, "weekday": "الأحد", "greg": "2027-04-18", "hijri": "11 ذو القعدة 1448", "weight": 2.0, "pages": "18 + 19", "from": "البقرة (113)", "to": "البقرة (126)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 186, "weekday": "الإثنين", "greg": "2027-04-19", "hijri": "12 ذو القعدة 1448", "weight": 2.0, "pages": "20 + 21", "from": "البقرة (127)", "to": "البقرة (141)", "juz": "1", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 187, "weekday": "الثلاثاء", "greg": "2027-04-20", "hijri": "13 ذو القعدة 1448", "weight": 2.0, "pages": "22 + 23", "from": "البقرة (142)", "to": "البقرة (153)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 188, "weekday": "الأربعاء", "greg": "2027-04-21", "hijri": "14 ذو القعدة 1448", "weight": 2.0, "pages": "24 + 25", "from": "البقرة (154)", "to": "البقرة (169)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 189, "weekday": "الخميس", "greg": "2027-04-22", "hijri": "15 ذو القعدة 1448", "weight": 2.0, "pages": "26 + 27", "from": "البقرة (170)", "to": "البقرة (181)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 190, "weekday": "الجمعة", "greg": "2027-04-23", "hijri": "16 ذو القعدة 1448", "weight": 2.0, "pages": "28 + 29", "from": "البقرة (182)", "to": "البقرة (190)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 191, "weekday": "السبت", "greg": "2027-04-24", "hijri": "17 ذو القعدة 1448", "weight": 2.0, "pages": "30 + 31", "from": "البقرة (191)", "to": "البقرة (202)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 192, "weekday": "الأحد", "greg": "2027-04-25", "hijri": "18 ذو القعدة 1448", "weight": 2.0, "pages": "32 + 33", "from": "البقرة (203)", "to": "البقرة (215)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 193, "weekday": "الإثنين", "greg": "2027-04-26", "hijri": "19 ذو القعدة 1448", "weight": 2.0, "pages": "34 + 35", "from": "البقرة (216)", "to": "البقرة (224)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 194, "weekday": "الثلاثاء", "greg": "2027-04-27", "hijri": "20 ذو القعدة 1448", "weight": 2.0, "pages": "36 + 37", "from": "البقرة (225)", "to": "البقرة (233)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 195, "weekday": "الأربعاء", "greg": "2027-04-28", "hijri": "21 ذو القعدة 1448", "weight": 2.0, "pages": "38 + 39", "from": "البقرة (234)", "to": "البقرة (245)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 196, "weekday": "الخميس", "greg": "2027-04-29", "hijri": "22 ذو القعدة 1448", "weight": 2.0, "pages": "40 + 41", "from": "البقرة (246)", "to": "البقرة (252)", "juz": "2", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 197, "weekday": "الجمعة", "greg": "2027-04-30", "hijri": "23 ذو القعدة 1448", "weight": 2.0, "pages": "42 + 43", "from": "البقرة (253)", "to": "البقرة (259)", "juz": "3", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 198, "weekday": "السبت", "greg": "2027-05-01", "hijri": "24 ذو القعدة 1448", "weight": 2.0, "pages": "44 + 45", "from": "البقرة (260)", "to": "البقرة (269)", "juz": "3", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 199, "weekday": "الأحد", "greg": "2027-05-02", "hijri": "25 ذو القعدة 1448", "weight": 2.0, "pages": "46 + 47", "from": "البقرة (270)", "to": "البقرة (281)", "juz": "3", "done": false, "surahNum": 2, "surahName": "البقرة"}, {"day": 200, "weekday": "الإثنين", "greg": "2027-05-03", "hijri": "26 ذو القعدة 1448", "weight": 2.0, "pages": "48 + 49", "from": "البقرة (282)", "to": "البقرة (286)", "juz": "3", "done": false, "surahNum": 2, "surahName": "البقرة"}];
+const TOTAL_PAGES = 604; // كامل صفحات المصحف
+// محفوظ سابقًا (غير ظاهر بالجدول لأنه قبل يس): من يس إلى الناس (440-604) = 165 صفحة
+const ALREADY_DONE_PAGES = 165;
+
+const AR_DIGITS = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+function toArabicDigits(n){ return String(n).replace(/[0-9]/g, d => AR_DIGITS[d]); }
+
+let doneSet = new Set(DATA.filter(d=>d.done).map(d=>d.day));
+
+async function loadProgress(){
+  try{
+    const raw = localStorage.getItem('wird-progress');
+    if(raw){
+      const arr = JSON.parse(raw);
+      arr.forEach(d => doneSet.add(d));
+    }
+  }catch(e){ /* no saved progress yet, or storage unavailable */ }
+}
+async function saveProgress(){
+  try{
+    localStorage.setItem('wird-progress', JSON.stringify(Array.from(doneSet)));
+  }catch(e){ console.error('storage save failed', e); }
+}
+
+function groupBySurah(){
+  const groups = [];
+  let current = null;
+  DATA.forEach(row=>{
+    if(!current || current.surahNum !== row.surahNum){
+      current = {surahNum: row.surahNum, surahName: row.surahName, rows: []};
+      groups.push(current);
+    }
+    current.rows.push(row);
+  });
+  return groups;
+}
+
+let isFirstRender = true;
+let openSurahs = null; // Set of surahNum currently open, persists across re-renders
+
+function render(){
+  function localDateStr(dt){
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth()+1).padStart(2,'0');
+    const d = String(dt.getDate()).padStart(2,'0');
+    return `${y}-${m}-${d}`;
+  }
+  const todayStr = localDateStr(new Date());
+  const todayRow = DATA.find(d=>d.greg === todayStr);
+  const now = new Date();
+  const weekdayArNow = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"][now.getDay()];
+  document.getElementById('todayLabel').textContent = `اليوم ${weekdayArNow}`;
+  document.getElementById('todayDate').textContent = todayRow ? todayRow.hijri : '—';
+  document.getElementById('todayGreg').textContent = todayStr;
+
+  const presetDoneWeight = DATA.filter(d=>d.done).reduce((s,d)=>s+d.weight,0);
+  const checkedWeight = DATA.filter(d=>doneSet.has(d.day) && !d.done).reduce((s,d)=>s+d.weight,0);
+  const donePagesExact = ALREADY_DONE_PAGES + presetDoneWeight + checkedWeight;
+  const pct = Math.min(100, (donePagesExact/TOTAL_PAGES)*100);
+  document.getElementById('barFill').style.width = pct+'%';
+  function toArabicNumber(n){
+    const rounded = Math.round(n*2)/2; // nearest .5
+    const isHalf = Math.abs(rounded - Math.trunc(rounded)) === 0.5;
+    const whole = Math.trunc(rounded);
+    return isHalf ? `${toArabicDigits(whole)}٫٥` : toArabicDigits(whole);
+  }
+  document.getElementById('progressTxt').textContent = `${toArabicNumber(donePagesExact)} من ${toArabicDigits(TOTAL_PAGES)} صفحة`;
+
+  const groups = groupBySurah();
+  const container = document.getElementById('sections');
+  container.innerHTML = '';
+
+  if(openSurahs === null){
+    openSurahs = new Set();
+    groups.forEach((g, gi)=>{
+      const containsToday = g.rows.some(r=>r.greg===todayStr);
+      if(containsToday || gi===0) openSurahs.add(g.surahNum);
+    });
+  }
+
+  groups.forEach((g, gi)=>{
+    const total = g.rows.length;
+    const doneCount = g.rows.filter(r=>doneSet.has(r.day)).length;
+    const isFull = doneCount === total;
+    const isOpen = openSurahs.has(g.surahNum);
+    const firstPage = g.rows[0].pages.split('-')[0].split('..')[0];
+    const lastRowPages = g.rows[g.rows.length-1].pages;
+    const lastPage = lastRowPages.includes('..') ? lastRowPages.split('..')[1] : lastRowPages.split('-').pop();
+
+    const section = document.createElement('div');
+    section.className = 'surah-section' + (isOpen ? ' open' : '');
+    if(isFirstRender){
+      section.style.animationDelay = (gi*0.04)+'s';
+    }else{
+      section.style.animation = 'none';
+      section.style.opacity = '1';
+      section.style.transform = 'none';
+    }
+    section.innerHTML = `
+      <div class="surah-head">
+        <div class="surah-head-l">
+          <div class="bead ${isFull?'full':''}"></div>
+          <div>
+            <div class="surah-name">سورة ${g.surahName}</div>
+            <div class="surah-meta">صفحات ${toArabicDigits(firstPage)}–${toArabicDigits(lastPage)}</div>
+          </div>
+        </div>
+        <div class="surah-head-r">
+          <span class="surah-progress-txt">${toArabicDigits(doneCount)}/${toArabicDigits(total)}</span>
+          <span class="chev"></span>
+        </div>
+      </div>
+      <div class="days"></div>
+    `;
+    const daysEl = section.querySelector('.days');
+    g.rows.forEach(row=>{
+      const isDone = doneSet.has(row.day);
+      const isToday = row.greg === todayStr;
+      const isLocked = row.done === true; // pre-tracker historical entry
+      const dayEl = document.createElement('div');
+      dayEl.className = 'day-row' + (isDone?' done':'') + (isToday?' today':'') + (isLocked?' locked':'');
+      const checkInner = isLocked
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      dayEl.innerHTML = `
+        <div class="check ${isDone?'on':''} ${isLocked?'locked':''}" data-day="${row.day}" ${isLocked?'data-locked="1"':''}>
+          ${checkInner}
+        </div>
+        <div class="day-info">
+          <div class="day-top">
+            ${isLocked ? '<span class="weekday-tag locked-tag">قبل الجدول</span>' : `<span class="day-num">${toArabicDigits(row.day)}</span><span class="weekday-tag">${row.weekday}</span><span class="day-dates"><span class="hijri">${row.hijri}</span><span class="greg">${row.greg}</span></span>`}
+          </div>
+          <div class="day-range"><b>${row.from}</b> ← ${row.to}</div>
+        </div>
+        <div class="day-pages">ص ${toArabicDigits(row.pages)}</div>
+      `;
+      daysEl.appendChild(dayEl);
+    });
+
+    section.querySelector('.surah-head').addEventListener('click', ()=>{
+      if(openSurahs.has(g.surahNum)) openSurahs.delete(g.surahNum);
+      else openSurahs.add(g.surahNum);
+      section.classList.toggle('open');
+    });
+
+    container.appendChild(section);
+  });
+
+  // checkbox handlers
+  container.querySelectorAll('.check').forEach(el=>{
+    if(el.dataset.locked) return; // historical entries can't be unchecked
+    el.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      const day = parseInt(el.dataset.day);
+      if(doneSet.has(day)) doneSet.delete(day); else doneSet.add(day);
+      await saveProgress();
+      render();
+    });
+  });
+
+  isFirstRender = false;
+}
+
+(async function init(){
+  await loadProgress();
+  render();
+})();
+</script>
+</body>
+</html>
